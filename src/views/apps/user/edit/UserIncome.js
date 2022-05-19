@@ -17,38 +17,24 @@ import {
   Collapse,
   Spinner
 } from "reactstrap"
-import { ContextLayout } from "../../../utility/context/Layout"
+import { ContextLayout } from "../../../../utility/context/Layout"
 import { AgGridReact } from "ag-grid-react"
 import {
   Edit,
-  Eye,
-  User,
   Trash2,
   ChevronDown,
   Clipboard,
   Printer,
   Download,
-  UserCheck,
+  RotateCw,
   X
 } from "react-feather"
-import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss"
-import "../../../assets/scss/pages/users.scss"
-import { history } from "../../../history"
-import { getAPICall, postAPICall } from "../../../redux/helpers/api_functions"
-import { connect } from "react-redux"
-import NotificationManager from "react-notifications/lib/NotificationManager"
-class UsersList extends React.Component {
-  static getDerivedStateFromProps(props, state) {
-    if (
-      props.currentUserId !== state.currentUserId
-    ) {
-      return {
-        currentUserId: props.currentUserId
-      }
-    }
-    // Return null if the state hasn't changed
-    return null
-  }
+import classnames from "classnames"
+import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss"
+import "../../../../assets/scss/pages/users.scss"
+import * as Icon from "react-feather"
+import { getAPICall, } from "../../../../redux/helpers/api_functions"
+class UserIncome extends React.Component {
   state = {
     rowData: null,
     pageSize: 20,
@@ -65,157 +51,68 @@ class UsersList extends React.Component {
     },
     searchVal: "",
     columnDefs: [
-      {
-        headerName: "#",
-        field: "rowIndex",
-        filter : true,
-        width : 50,
-        cellRendererFramework: params => {
-          return (
-            <>
-              {1+params.rowIndex}   
-            </>
-          )
-        }
-      },
-      // {
-      //   headerName: "Profile Pic",
-      //   field: "username",
-      //   width: 100,
-      //   cellRendererFramework: params => {
-      //     return params.value == '' ? (
-      //       <div className="d-flex align-items-center cursor-pointer" >
-      //         <img
-      //           className="rounded-circle mr-50"
-      //           src={params.data.avatar}
-      //           alt="user avatar"
-      //           height="30"
-      //           width="30"
-      //         />
-      //       </div>
-      //     ) : (
-      //       <User size={30} />
-      //     )
-      //   }
-      // },
+       
       {
         headerName: "Email",
         field: "email",
         filter: true,
-        editable: true,
-        width: 250      
+        width: 250
       },
- 
       {
-        headerName: "Status",
-        field: "status",
+        headerName: "Token Balance",
+        field: "token_price",
         filter: true,
-        width: 150,
-        cellRendererFramework: params => {
-          return params.value === 1 ? (
-            <div className="badge badge-pill badge-light-success">
-              Active
-            </div>
-          ) : params.value === 0 ? (
-            <div className="badge badge-pill badge-light-warning">
-              Not Active
-            </div>
-          ) : params.value === 2 ? (
-            <div className="badge badge-pill badge-light-danger">
-              Blocked
-            </div>
-          ) : null
-        }
+        width: 250
       },
-     
-      // {
-      //   headerName: "KYC Verified",
-      //   field: "is_kyc_verified",
-      //   filter: true,
-      //   width: 130,
-      //   cellRendererFramework: params => {
-      //     return params.value === 1 ? (
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? (
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : null
-      //   }
-      // },
-      // {
-      //   headerName: "Bank Verified",
-      //   field: "is_bank_verified",
-      //   filter: true,
-      //   width: 130,
-      //   cellRendererFramework: params => {
-      //     return params.value === 1 ? (
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? (
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : null
-      //   }
-      // },
-      // {
-      //   headerName: "Mobile Number",
-      //   field: "mobile_number",
-      //   filter: true,
-      //   width: 125,
-      //   cellRendererFramework: params => {
-      //     return params.value === 0 ? (
-      //       <div className=""> </div>
-      //     ) :  (
-      //       <div className="">{params.value}</div>
-      //     )
-      //   }
-      // },
-      {
-        headerName: "Edit/Active/Delete",
-        field: "transactions",
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="actions cursor-pointer">
-              <Eye
-                className="mr-2"
-                size={28}
-                onClick={() => history.push("/app/user/edit/UserEdit")}
-              />
-              <UserCheck
-                className="mr-2"
-                size={28}
-                onClick={() => {
-                  this.unBlockUser("update_profile",params.data.email,1)
-                }}
-              />
-              {/* <Trash2
-                
-                size={28}
-                onClick={() => {
-                  this.deleteUser("delete_user",params.data.user_id,-2)
-                }}
-              /> */}
-            </div>
-          )
-        }
-      }
+   
+    //   {
+    //     headerName: "Amount", 
+    //     field: "amount",
+    //     filter: true,
+    //     width: 250
+    //   },
+    //   {
+    //     headerName: "Raw Price",
+    //     field: "raw_price",
+    //     filter: true,
+    //     width: 250
+    //   },
+    //   {
+    //     headerName: "Currency Type",
+    //     field: "currency_type",
+    //     filter: true,
+    //     width: 250
+    //   },
+    //   {
+    //     headerName: "Compare Currency",
+    //     field: "compair_currency",
+    //     filter: true,
+    //     width: 250
+    //   },
+    //   {
+    //     headerName: "Date",
+    //     field: "createdAt",
+    //     filter: true,
+    //     width: 250,
+    //   },
     ]
   }
 
   async componentDidMount() {
-    // let params = "?action=blockuser&raw=0&admin_user_id="+this.state.currentUserId;
-    getAPICall('getUser?status=2')
-    .then(response => {
-      const rowData = response.data.user;
+   getAPICall("getIncome"+window.location.search).then((d)=>{
+     
+        const rowData = d.data.ref;
+       
+          this.setState({rowData})
+     
       
-        this.setState({ rowData });
-      
-    }).catch(err=>console.log(err,"errororor"))
+    }).catch((e) => console.log(e));
   }
 
   onGridReady = params => {
     this.gridApi = params.api
     this.gridColumnApi = params.columnApi
   }
-
   filterData = (column, val) => {
     var filter = this.gridApi.getFilterInstance(column)
     var modelObj = null
@@ -279,52 +176,9 @@ class UsersList extends React.Component {
   removeCard = () => {
     this.setState({ isVisible: false })
   }
-  deleteUser = (action,user_id,status) => {
-    let alltxtData = {}
-    if(!action && !user_id){
-      NotificationManager.error("Please Fill All Information")
-    }else{
-        alltxtData.action    = action;
-        alltxtData.user_id    = user_id;
-        alltxtData.status    = status;
-        alltxtData.admin_user_id = this.state.currentUserId;
-        postAPICall('permanent_delete_user',alltxtData)
-        .then(response => {
-          if(response.data.status == 200){
-            let selectedData = this.gridApi.getSelectedRows()
-            this.gridApi.updateRowData({ remove: selectedData })
-            NotificationManager.success("Employee Deleted Successfully")             
-          }else{
-            NotificationManager.error(response.data.message)
-          }
-        })
-        this.setState({validPassword:true});
-    }
-  }
-  unBlockUser = (action,email,status) => {
-    let alltxtData = {}
-    if(!email){
-      NotificationManager.error("Please Fill All Information")
-    }else{
-        alltxtData.action    = action;
-        alltxtData.email    = email;
-        alltxtData.status    = status;
-        alltxtData.admin_user_id = this.state.currentUserId;
-        postAPICall('blockuser',alltxtData)
-        .then(response => {
-          if(response.status == 200){
-            let selectedData = this.gridApi.getSelectedRows()
-            this.gridApi.updateRowData({ remove: selectedData })
-            NotificationManager.success(response.data.message)
-          }else{
-            NotificationManager.error(response.data.message)
-          }
-        })
-        this.setState({validPassword:true});
-    }
-  }
+
   render() {
-    const { rowData, columnDefs, defaultColDef, pageSize } = this.state
+    const {  rowData, columnDefs, defaultColDef, pageSize } = this.state
     return (
       <Row className="app-user-list">
         <Col sm="12">
@@ -369,7 +223,7 @@ class UsersList extends React.Component {
                     </UncontrolledDropdown>
                   </div>
                   <div className="">
-                    <div className="h2 float-left">Total Blocked User: {this.state.rowData !== null ? this.state.rowData.length : 0 }</div>
+                    <div className="h2 float-left">User Income : {this.state.rowData !== null ? this.state.rowData.length : 0 }</div>
                   </div>
                   <div className="filter-actions d-flex">
                     <Input
@@ -438,9 +292,4 @@ class UsersList extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    currentUserId: state.auth.login.user.user_id
-  }
-}
-export default connect(mapStateToProps)(UsersList)
+export default UserIncome;

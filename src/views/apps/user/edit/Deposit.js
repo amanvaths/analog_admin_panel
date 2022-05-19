@@ -33,7 +33,7 @@ import classnames from "classnames"
 import "../../../../assets/scss/plugins/tables/_agGridStyleOverride.scss"
 import "../../../../assets/scss/pages/users.scss"
 import * as Icon from "react-feather"
-import { postAPICall } from "../../../../redux/helpers/api_functions"
+import { getAPICall, } from "../../../../redux/helpers/api_functions"
 class Depositlist extends React.Component {
   state = {
     rowData: null,
@@ -51,6 +51,12 @@ class Depositlist extends React.Component {
     },
     searchVal: "",
     columnDefs: [
+      {
+        headerName: "Email",
+        field: "email",
+        filter: true,
+        width: 250
+      },
       {
         headerName: "Type",
         field: "type",
@@ -70,17 +76,24 @@ class Depositlist extends React.Component {
         width: 250
       },
       {
-        headerName: "From Address",
-        field: "from_address",
-        filter: true,
-        width: 400
-      },
-      {
         headerName: "To Address",
         field: "to_address",
         filter: true,
         width: 450
       },
+      {
+      headerName: "Status",
+      field: "status",
+      filter: true,
+      width: 150,
+      cellRendererFramework: params => {
+        return params.value == true ? ( // for active
+          <div className="badge badge-pill badge-light-success">Success</div>
+        ) : params.value == false ? ( // Not submitted
+          <div className="badge badge-pill badge-light-danger">Failed</div>
+        ) : null
+      }
+    },
       {
         headerName: "Date",
         field: "createdAt",
@@ -98,17 +111,18 @@ class Depositlist extends React.Component {
   }
 
   async componentDidMount() {
-    const params = new URLSearchParams(window.location.search);
-    const user_id = params.get('user_id');
-    const body = {
-      user_id: user_id
-    }
-    postAPICall("admin-deposit-history", body).then((d)=>{
+    // const params = new URLSearchParams(window.location.search);
+    // const user_id = params.get('user_id');
+    // const body = {
+    //   user_id: user_id
+    // }
+
+   getAPICall("depositHestory"+window.location.search).then((d)=>{
       if(d.status === 200){
-        const deposit_data = d.data;
-        if(deposit_data.status === 200) {
-          this.setState({ rowData: deposit_data.params.deposit})
-        }
+        const deposit_data = d.data.transaction;
+       
+          this.setState({ rowData: deposit_data})
+     
       }
     }).catch((e) => console.log(e));
   }

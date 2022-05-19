@@ -11,6 +11,10 @@ import {
   DropdownItem,
   DropdownToggle,
   Spinner,
+  Button,
+  FormGroup,
+  Label,
+  Form
 } from "reactstrap"
 import { ContextLayout } from "../../../utility/context/Layout"
 import { AgGridReact } from "ag-grid-react"
@@ -25,7 +29,8 @@ import "../../../assets/scss/plugins/tables/_agGridStyleOverride.scss"
 import "../../../assets/scss/pages/users.scss"
 import "react-toggle/style.css"
 import "../../../assets/scss/plugins/forms/switch/react-toggle.scss"
-import { postAPICall } from "../../../redux/helpers/api_functions"
+import { postAPICall,getAPICall } from "../../../redux/helpers/api_functions";
+import { NotificationManager } from "react-notifications"
 import { connect } from "react-redux"
 
 class UsersList extends React.Component {
@@ -94,17 +99,6 @@ class UsersList extends React.Component {
         }
     },
     {
-      headerName: "Name",
-      field: "first_name",
-      filter: true,
-      width: 250,
-      cellRendererFramework: params => {
-        return (
-          <div className=""> {params.data.first_name} {params.data.middle_name} {params.data.last_name}</div>
-        )
-      }
-    },
-    {
       headerName: "Coin ",
       field: "symbol",
       filter: true,
@@ -117,8 +111,22 @@ class UsersList extends React.Component {
       filter: true,
     },
     {
-      headerName: "Transection ID",
-      field: "transection_id",
+      headerName: "Balance",
+      field: "balance",
+      filter: true,
+      editable: true,
+      width: 250,
+    },
+    {
+      headerName: "To Address",
+      field: "to_address",
+      filter: true,
+      editable: true,
+      width: 250,
+    },
+    {
+      headerName: "Type",
+      field: "type",
       filter: true,
       editable: true,
       width: 250,
@@ -224,39 +232,124 @@ class UsersList extends React.Component {
       user_id: this.state.currentUserId,
       token: this.state.token,
     }
-    postAPICall('deposite_history',formData)
+    getAPICall('depositHestory')
     .then(response => {
-      const rowData = response.data.history;
+      const rowData = response.data.transaction;
       this.setState({ rowData });
     })
   }
-  updateQUERY = (token_symbol,action,status) => {
-    const alltxtData = {
-        token_symbol: token_symbol,
-        [action]: status,
-        admin_user_id: this.state.currentUserId
+  // updateQUERY = (token_symbol,action,status) => {
+  //   const alltxtData = {
+  //       token_symbol: token_symbol,
+  //       [action]: status,
+  //       admin_user_id: this.state.currentUserId
+  //   }
+  //   postAPICall('updatecrptosetting',alltxtData)
+  //   .then(response => {
+  //       console.log(response)
+  //   })
+  // }
+
+  updateQUERY(start,end){
+    const sDate =new Date(start).toISOString().substring(0,10)
+    const eDate = new Date(end).toISOString().substring(0,10)
+   
+    // this.clear();
+ 
+    if(start==null || end ==null){
+      NotificationManager.error("Missing credentials.")
+    }else{
+      getAPICall("depositHestory?start="+sDate +"&endDate="+eDate).then((res)=>{
+    
+        // if(res.data.status == 200) {
+        //   let dataSource = {
+        //     getRows(rowData) {
+        //         rowData.successCallback(res.data.order,res.data.order.length);
+        //     }
+        // };
+    
+        //   this.state.gridApi.setDatasource(dataSource);
+        //   //  this.setState({ rowData:res.data.order });
+        // }
+        this.setState({rowData:res.data.transaction})
+      }
+      ).catch((err)=> console.log(err,"err"))
     }
-    postAPICall('updatecrptosetting',alltxtData)
-    .then(response => {
-        console.log(response)
-    })
-  }
+   
+  
+  
+    
+  };
+
   render() {
     const { rowData,columnDefs, blockchain_radio, defaultColDef, pageSize } = this.state;
 
-    let token_list = null;
-    if(this.state.alltoken != null){
-        token_list = this.state.alltoken && this.state.alltoken.map(tokn =>{
-            return {label: tokn.name+" ("+tokn.symbol+") ", value: tokn.symbol}
-        })
-    }
+    // let token_list = null;
+    // if(this.state.alltoken != null){
+    //     token_list = this.state.alltoken && this.state.alltoken.map(tokn =>{
+    //         return {label: tokn.name+" ("+tokn.symbol+") ", value: tokn.symbol}
+    //     })
+    // }
     return (
     <React.Fragment>
         <Row className="app-user-list">
+        <Col sm="12">
+        <Card>
+              <CardBody>
+                <Form className="row">
+        
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="from" className="h5">
+                       FROM
+                      </Label>
+                      <Input
+                        type="date"
+                        id="from"
+                        placeholder="From Date"
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="to" className="h5">
+                        To
+                      </Label>
+                      <Input
+                        type="date"
+                        id="to"
+                        placeholder="To Date"
+                        // invalid={this.state.validPassword === false}
+                      />
+                      
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Button.Ripple
+                        color="primary"
+                        type="button"
+                        className="mt-2"
+                        onClick={() => {
+                          this.updateQUERY(
+                            document.querySelector("#from").value? document.querySelector("#from").value:null,
+                            document.querySelector("#to").value? document.querySelector("#to").value:null
+                          );
+                        }}
+                      >
+                        Find Order
+                      </Button.Ripple>
+                    </FormGroup>
+                  </Col>
+                </Form>
+              </CardBody>
+            </Card>
+        </Col>
+          {/* helloo */}
             <Col sm="12">
             <Card>
                 <CardBody>
-                <div className="ag-theme-material ag-grid-table">
+                <div className="ag-theme-material ag-grid-table" style={{height:"80vh"}}>
                     <div className="ag-grid-actions d-flex justify-content-between flex-wrap mb-1">
                     <div className="sort-dropdown">
                         <UncontrolledDropdown className="ag-dropdown p-1">
@@ -293,7 +386,7 @@ class UsersList extends React.Component {
                         </UncontrolledDropdown>
                     </div>
                     <div className="">
-                      <div className="h2 float-left">Total Users : {this.state.rowData !== null ? this.state.rowData.length : 0 }</div>
+                      <div className="h2 float-left">Total Deposit : {this.state.rowData !== null ? this.state.rowData.length : 0 }</div>
                     </div>
                     <div className="filter-actions d-flex">
                         <Input

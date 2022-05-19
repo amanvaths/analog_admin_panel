@@ -61,6 +61,38 @@ const navigationConfig = [
   },
   {
     type: "groupHeader",
+    groupTitle: "Notification & News",
+    parentof: 'notification',
+  },
+  {
+    id: "notificationandNews",
+    parentof: 'notification',
+    title: "Create News & Notification",
+    type: "item",
+    icon: <Icon.Circle size={12} />,
+    
+    navLink: "/app/notificationform"
+  },
+  {
+    id: "notification",
+    parentof: 'notification',
+    title: "Notifications",
+    type: "item",
+    icon: <Icon.Circle size={12} />,
+    
+    navLink: "/app/notification"
+  },
+  {
+    id: "news",
+    parentof: 'notification',
+    title: "News",
+    type: "item",
+    icon: <Icon.Circle size={12} />,
+    
+    navLink: "/app/news"
+  },
+  {
+    type: "groupHeader",
     groupTitle: "Users",
     parentof: 'users',
   },
@@ -176,51 +208,51 @@ const navigationConfig = [
   //   parentof: 'users',
   //   navLink: "/app/user/bankpending"
   // },
-  {
-    type: "groupHeader",
-    groupTitle: "Withdraw Request",
-    parentof: 'withdrawrequest',
-  },
-  {
-    id: "pendingwithdraw",
-    title: "Pending Withdraw",
-    type: "item",
-    icon: <Icon.User size={20} />,
-    parentof: 'withdrawrequest',
-    navLink: "/app/withdraw/pendingwithdraw",
-  },
-  {
-    id: "verifiedwithdraw",
-    title: "Verified Withdraw",
-    type: "item",
-    parentof: 'withdrawrequest',
-    icon: <Icon.User size={20} />,
-    navLink: "/app/withdraw/verifiedwithdraw",
-  },
-  {
-    id: "rejectedwithdraw",
-    parentof: 'withdrawrequest',
-    title: "Rejected Withdraw ",
-    type: "item",
-    icon: <Icon.Circle size={12} />,
+  // {
+  //   type: "groupHeader",
+  //   groupTitle: "Withdraw Request",
+  //   parentof: 'withdrawrequest',
+  // },
+  // {
+  //   id: "pendingwithdraw",
+  //   title: "Pending Withdraw",
+  //   type: "item",
+  //   icon: <Icon.User size={20} />,
+  //   parentof: 'withdrawrequest',
+  //   navLink: "/app/withdraw/pendingwithdraw",
+  // },
+  // {
+  //   id: "verifiedwithdraw",
+  //   title: "Verified Withdraw",
+  //   type: "item",
+  //   parentof: 'withdrawrequest',
+  //   icon: <Icon.User size={20} />,
+  //   navLink: "/app/withdraw/verifiedwithdraw",
+  // },
+  // {
+  //   id: "rejectedwithdraw",
+  //   parentof: 'withdrawrequest',
+  //   title: "Rejected Withdraw ",
+  //   type: "item",
+  //   icon: <Icon.Circle size={12} />,
     
-    navLink: "/app/withdraw/rejectedwithdraw"
-  },
+  //   navLink: "/app/withdraw/rejectedwithdraw"
+  // },
   {
     type: "groupHeader",
     parentof: 'coinandtoken',
     groupTitle: "Coin & Token"
   },
-  {
-    id: "addtoken",
-    title: "Add token",
-    type: "item",
-    parentof: 'coinandtoken',
-    icon: <Icon.CreditCard size={20} />,
-    badge: "primary",
+  // {
+  //   id: "addtoken",
+  //   title: "Add token",
+  //   type: "item",
+  //   parentof: 'coinandtoken',
+  //   icon: <Icon.CreditCard size={20} />,
+  //   badge: "primary",
 
-    navLink: "/app/token/addtoken"
-  },
+  //   navLink: "/app/token/addtoken"
+  // },
   {
     id: "crptosetting",
     title: "Cypto Setting",
@@ -230,32 +262,32 @@ const navigationConfig = [
     
     navLink: "/app/token/crptosetting"
   },
-  {
-    id: "crptolimit",
-    title: "Cypto Limit/Capping",
-    type: "item",
-    parentof: 'coinandtoken',
-    icon: <Icon.Eye size={20} />,
+  // {
+  //   id: "crptolimit",
+  //   title: "Cypto Limit/Capping",
+  //   type: "item",
+  //   parentof: 'coinandtoken',
+  //   icon: <Icon.Eye size={20} />,
     
-    navLink: "/app/token/crptolimit"
-  },
-  {
-    id: "createpairing",
-    title: "Create Pairing",
-    type: "item",
-    icon: <Icon.Eye size={20} />,
-    parentof: 'coinandtoken',
-    navLink: "/app/token/createpairing"
-  },
-  {
-    id: "setpairing",
-    title: "Set Pairing",
-    type: "item",
-    parentof: 'coinandtoken',
-    icon: <Icon.Eye size={20} />,
+  //   navLink: "/app/token/crptolimit"
+  // },
+  // {
+  //   id: "createpairing",
+  //   title: "Create Pairing",
+  //   type: "item",
+  //   icon: <Icon.Eye size={20} />,
+  //   parentof: 'coinandtoken',
+  //   navLink: "/app/token/createpairing"
+  // },
+  // {
+  //   id: "setpairing",
+  //   title: "Set Pairing",
+  //   type: "item",
+  //   parentof: 'coinandtoken',
+  //   icon: <Icon.Eye size={20} />,
     
-    navLink: "/app/token/setpairing"
-  },
+  //   navLink: "/app/token/setpairing"
+  // },
   {
     type: "groupHeader",
     groupTitle: "Wallet Settings",
@@ -270,109 +302,117 @@ const navigationConfig = [
     
     navLink: "/app/wallets/coldwallet"
   },
-  {
-    id: "capturehits",
-    title: "Capture History",
-    type: "item",
-    parentof: 'wallet',
-    icon: <Icon.CreditCard size={20} />,
-    badge: "primary",
-    navLink: "/app/wallets/capturehits"
-  },
-  {
-    id: "adminsendcapture",
-    title: "Admin Send Capture",
-    type: "item",
-    parentof: 'wallet',
-    icon: <Icon.CreditCard size={20} />,
-    badge: "primary",
-    navLink: "/app/wallets/adminsendcapture"
-  },
-  {
-    id: "capturefundhistory",
-    title: "User Capture History",
-    type: "item",
-    parentof: 'wallet',
-    icon: <Icon.CreditCard size={20} />,
-    badge: "primary",
-    navLink: "/app/wallets/capturefundhistory"
-  },
+  // {
+  //   id: "capturehits",
+  //   title: "Capture History",
+  //   type: "item",
+  //   parentof: 'wallet',
+  //   icon: <Icon.CreditCard size={20} />,
+  //   badge: "primary",
+  //   navLink: "/app/wallets/capturehits"
+  // },
+  // {
+  //   id: "adminsendcapture",
+  //   title: "Admin Send Capture",
+  //   type: "item",
+  //   parentof: 'wallet',
+  //   icon: <Icon.CreditCard size={20} />,
+  //   badge: "primary",
+  //   navLink: "/app/wallets/adminsendcapture"
+  // },
+  // {
+  //   id: "capturefundhistory",
+  //   title: "User Capture History",
+  //   type: "item",
+  //   parentof: 'wallet',
+  //   icon: <Icon.CreditCard size={20} />,
+  //   badge: "primary",
+  //   navLink: "/app/wallets/capturefundhistory"
+  // },
 
 
-  {
-    id: "hotwallet",
-    title: "Hot Wallet",
-    type: "item",
-    icon: <Icon.CreditCard size={20} />,
-    parentof: 'wallet',
-    navLink: "/app/wallets/hotwallet"
-  },
-  {
-    id: "tradefeeswallet",
-    title: "Trade Fees",
-    type: "item",
-    parentof: 'wallet',
-    icon: <Icon.Droplet size={20} />,
+  // {
+  //   id: "hotwallet",
+  //   title: "Hot Wallet",
+  //   type: "item",
+  //   icon: <Icon.CreditCard size={20} />,
+  //   parentof: 'wallet',
+  //   navLink: "/app/wallets/hotwallet"
+  // },
+  // {
+  //   id: "tradefeeswallet",
+  //   title: "Trade Fees",
+  //   type: "item",
+  //   parentof: 'wallet',
+  //   icon: <Icon.Droplet size={20} />,
     
-    navLink: "/app/wallets/tradefeeswallet"
-  },
-  {
-    id: "withdrawfeeswallet",
-    title: "With/Dep Fees",
-    type: "item",
-    parentof: 'wallet',
-    icon: <Icon.Eye size={20} />,
+  //   navLink: "/app/wallets/tradefeeswallet"
+  // },
+  // {
+  //   id: "withdrawfeeswallet",
+  //   title: "With/Dep Fees",
+  //   type: "item",
+  //   parentof: 'wallet',
+  //   icon: <Icon.Eye size={20} />,
     
-    navLink: "/app/wallets/withdrawfeeswallet"
-  },
+  //   navLink: "/app/wallets/withdrawfeeswallet"
+  // },
   {
     type: "groupHeader",
     groupTitle: "Order Report",
     parentof: 'order',
   },
-  {
-    id: "openbuy",
-    title: "Open Buy",
-    type: "item",
-    icon: <Icon.Copy size={20} />,
-    parentof: 'order',
-    navLink: "/app/order/openbuy"
-  },
-  {
-    id: "opensell",
-    title: "Open Sell",
-    type: "item",
-    icon: <Icon.Copy size={20} />,
-    parentof: 'order',
-    navLink: "/app/order/opensell"
-  },
-  {
-    id: "excutedbuysell",
-    title: "Executed Order",
-    type: "item",
-    icon: <Icon.Box size={20} />,
-    parentof: 'order',
-    navLink: "/app/order/excutedbuysell"
-  },
-  {
-    id: "canclebuyorder",
-    title: "Cancled Buy Orders",
-    type: "item",
-    icon: <Icon.MoreHorizontal size={20} />,
-    parentof: 'order',
-    navLink: "/app/order/canclebuyorder"
-  },
-  {
-    id: "canclesellorder",
-    title: "Cancled Sell Orders",
-    type: "item",
-    icon: <Icon.MoreHorizontal size={20} />,
-    parentof: 'order',
-    navLink: "/app/order/canclesellorder"
-  },
-  {
+  // {
+  //     id: "Order",
+  //     title: "Order",
+  //     type: "item",
+  //     icon: <Icon.Copy size={20} />,
+  //     parentof: 'order',
+  //     navLink: "/app/order"
+  //   },
+  // {
+  //   id: "openbuy",
+  //   title: "Open Buy",
+  //   type: "item",
+  //   icon: <Icon.Copy size={20} />,
+  //   parentof: 'order',
+  //   navLink: "/app/order/openbuy"
+  // },
+  // {
+  //   id: "opensell",
+  //   title: "Open Sell",
+  //   type: "item",
+  //   icon: <Icon.Copy size={20} />,
+  //   parentof: 'order',
+  //   navLink: "/app/order/opensell"
+  // },
+  // {
+  //   id: "excutedbuysell",
+  //   title: "Executed Order",
+  //   type: "item",
+  //   icon: <Icon.Box size={20} />,
+  //   parentof: 'order',
+  //   navLink: "/app/order/excutedbuysell"
+  // },
+  // {
+  //   id: "canclebuyorder",
+  //   title: "Cancled Buy Orders",
+  //   type: "item",
+  //   icon: <Icon.MoreHorizontal size={20} />,
+  //   parentof: 'order',
+  //   navLink: "/app/order/canclebuyorder"
+  // },
+  // {
+  //   id: "canclesellorder",
+  //   title: "Cancled Sell Orders",
+  //   type: "item",
+  //   icon: <Icon.MoreHorizontal size={20} />,
+  //   parentof: 'order',
+  //   navLink: "/app/order/canclesellorder"
+  // },
+   {
     id: "createorder",
-    title: "Create Order",
+    title: "Order",
     type: "item",
     icon: <Icon.MoreHorizontal size={20} />,
     parentof: 'order',

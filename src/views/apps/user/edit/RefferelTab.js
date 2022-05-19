@@ -27,8 +27,9 @@ import "react-toggle/style.css"
 import "../../../../assets/scss/plugins/forms/switch/react-toggle.scss"
 import { getAPICall, postAPICall } from "../../../../redux/helpers/api_functions"
 import { connect } from "react-redux"
+import { NotificationManager } from "react-notifications"
 
-class UsersList extends React.Component {
+class RefferelTab extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (
       props.currentUserId !== state.currentUserId
@@ -76,41 +77,48 @@ class UsersList extends React.Component {
         }
       },
       {
-        headerName: "User",
-        field: "name",
+        headerName: "User Id",
+        field: "user_id",
         filter : true,
         width: 450,
     },
       {
-        headerName: "Reffreal Volume",
-        field: "valume",
+        headerName: "Email",
+        field: "email",
         filter : true,
         width: 200,
     },
     {
-      headerName: "Coin",
-      field: "wallet_type",
+      headerName: "Refferal Bonus",
+      field: "referral_bonus",
       filter : true,
       width: 200,
     },
     {
-      headerName: "KYC Status",
-      field: "kyc_status",
+      headerName: "Signup Bonus",
+      field: "signup_bonus",
       filter : true,
-      width: 250,
-      cellRendererFramework: params => {
-        return params.value === 1 ? ( // for active
-          <div className="badge badge-pill badge-light-success">Done</div>
-        ) : params.value === 0 ? ( // Not submitted
-          <div className="badge badge-pill badge-light-warning">Not Filled </div>
-        ) : params.value === 2 ? ( // rejecetd
-          <div className="badge badge-pill badge-light-danger">Rejected</div>
-        ) : params.value === -1 ? ( // submitted but not approve
-          <div className="badge badge-pill badge-light-warning">Filled but not Verified</div>
-        ) : (
-          <div className="badge badge-pill badge-light-warning">Not Filled</div>
-        )
-        }
+      width: 200,
+    },
+    {
+      headerName: "Buying Bonus",
+      field: "buying_bonus",
+      filter : true,
+      width: 200,
+    },
+    {
+      headerName: "Token Balance",
+      field: "token_balance",
+      filter : true,
+      width: 200,
+     
+      },
+      {
+      headerName: "Wallet Balance",
+      field: "wallet_balance",
+      filter : true,
+      width: 200,
+     
       },
       {
         headerName: "Date",
@@ -195,41 +203,49 @@ class UsersList extends React.Component {
     this.setState({ isVisible: false })
   }
   async componentDidMount() {
-    getAPICall('user/get-referal-info'+window.location.search+'&admin_user_id='+this.state.currentUserId)
+    const params = window.location.search;
+    const newParams = params.substring(7)
+    console.log(newParams,"Hellos");
+      postAPICall('getAffiliates',{email:newParams})
     .then(response => {
-      const rowData = response.data?.params?.total_referals ? response.data?.params?.total_referals : false;
-      const referral_code = response.data?.params?.referral_code;
-      this.setState({ rowData });
-      if(referral_code){
-        this.setState({ referral_code });
+      if(response.status==200){
+        const rowData = response.data;
+        const referral_code = response.data[0]?.refferal;
+        this.setState({ rowData });
+       
+          this.setState({ referral_code });
+      }else{
+        this.setState({ rowData:[] });
+        NotificationManager.warning("No Referral found!")
       }
+  
+      
+    }).catch(()=>{
+      this.setState({ rowData:[] });
+      NotificationManager.error("No Network!")
     })
-    getAPICall('settings?admin_user_id='+this.state.currentUserId)
-    .then(response => {
-        const website_setting = response.data;
-        this.setState({website_setting:website_setting});
-    })
+   
   }
-    updateQUERY = () => {
-        const serialize = require('form-serialize');
-        const form = document.querySelector('#tokendata');
-        let alltxtData = serialize(form, { hash: true });
-        alltxtData.admin_user_id = this.state.currentUserId;
-        postAPICall('updatesettings',alltxtData)
-        .then(response => {
-            const website_setting = response.data.setting;
-            this.setState({website_setting:website_setting});
-        })
-    }
+    // updateQUERY = () => {
+    //     const serialize = require('form-serialize');
+    //     const form = document.querySelector('#tokendata');
+    //     let alltxtData = serialize(form, { hash: true });
+    //     alltxtData.admin_user_id = this.state.currentUserId;
+    //     postAPICall('updatesettings',alltxtData)
+    //     .then(response => {
+    //         const website_setting = response.data.setting;
+    //         this.setState({website_setting:website_setting});
+    //     })
+    // }
   render() {
     const {rowData, referral_code,columnDefs, blockchain_radio, defaultColDef, pageSize } = this.state;
     
-    let token_list = null;
-    if(this.state.gettoken != null){
-        token_list = this.state.gettoken && this.state.gettoken.map(tokn =>{
-            return {label: tokn.name+" ("+tokn.symbol+") ", value: tokn.symbol}
-        })
-    }
+    // let token_list = null;
+    // if(this.state.gettoken != null){
+    //     token_list = this.state.gettoken && this.state.gettoken.map(tokn =>{
+    //         return {label: tokn.name+" ("+tokn.symbol+") ", value: tokn.symbol}
+    //     })
+    // }
     return (
     <React.Fragment>
         <Row className="app-user-list">
@@ -311,6 +327,14 @@ class UsersList extends React.Component {
                         </div>
                     </div>
                     </div>
+                    {this.state.rowData == null && this.state.rowData == false && (
+                      <>
+                        <div className="float-left">
+                              <Spinner color="primary" />
+                            </div>
+                            <h2 className="float-left ml-1">System is Calculating All Reffreal.</h2>
+                      </>
+                    )}
                     {this.state.rowData !== null && this.state.rowData !== false ? (
                     <ContextLayout.Consumer>
                         {context => (
@@ -332,14 +356,7 @@ class UsersList extends React.Component {
                         />
                         )}
                     </ContextLayout.Consumer>
-                    ) : (
-                      <>
-                        <div className="float-left">
-                              <Spinner color="primary" />
-                            </div>
-                            <h2 className="float-left ml-1">System is Calculating All Reffreal.</h2>
-                      </>
-                    )}
+                    ) :<h2>No Refferal found.</h2>}
                 </div>
                 </CardBody>
             </Card>
@@ -350,9 +367,10 @@ class UsersList extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    currentUserId: state.auth.login.user.user_id
-  }
-}
-export default connect(mapStateToProps)(UsersList)
+// const mapStateToProps = state => {
+//   return {
+//     currentUserId: state.auth.login.user.user_id
+//   }
+// }
+export default RefferelTab;
+// connect(mapStateToProps)

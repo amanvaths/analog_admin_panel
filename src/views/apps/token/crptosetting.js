@@ -63,14 +63,14 @@ class UsersList extends React.Component {
     searchVal: "",
     blockchain_radio:null,
     columnDefs: [
-      {
-        headerName: "ID",
-        field: "id",
-        width: 50,
-        checkboxSelection: true,
-        headerCheckboxSelectionFilteredOnly: true,
-        headerCheckboxSelection: true
-      },
+      // {
+      //   headerName: "ID",
+      //   field: "id",
+      //   width: 50,
+      //   checkboxSelection: true,
+      //   headerCheckboxSelectionFilteredOnly: true,
+      //   headerCheckboxSelection: true
+      // },
       {
         headerName: "#",
         field: "rowIndex",
@@ -84,25 +84,25 @@ class UsersList extends React.Component {
           )
         }
       },
-      {
-        headerName: "Logo",
-        field: "icon",
-        width: 100,
-        cellRendererFramework: params => {
-          return (
-              <>
-                <Media
-                  className="users-avatar-shadow rounded"
-                  object
-                  src={params.value}
-                  alt="user profile image"
-                  height="25"
-                  width="25"
-                  />
-              </>
-              )
-          }
-      },
+      // {
+      //   headerName: "Logo",
+      //   field: "icon",
+      //   width: 100,
+      //   cellRendererFramework: params => {
+      //     return (
+      //         <>
+      //           <Media
+      //             className="users-avatar-shadow rounded"
+      //             object
+      //             src={params.value}
+      //             alt="user profile image"
+      //             height="25"
+      //             width="25"
+      //             />
+      //         </>
+      //         )
+      //     }
+      // },
       {
         headerName: "Token Name",
         field: "name",
@@ -264,31 +264,28 @@ class UsersList extends React.Component {
     this.setState({ isVisible: false })
   }
   async componentDidMount() {
-        let alltxtData = {
-      admin_user_id : this.state.currentUserId
-    }
-    postAPICall('gettoken',alltxtData)
+    
+    getAPICall('getCryptoSetting')
     .then(response => {
-      const rowData = response.data;
+      const rowData = response.data.crypto;
       this.setState({ rowData });
     })
   }
   updateQUERY = (token_symbol,action,status) => {
-    status = status ? 0 : 1;
+    status = status ? false : true;
+    console.log(status,"status")
     const alltxtData = {
-        token_symbol: token_symbol,
+        symbol: token_symbol,
         [action]: status,
-        admin_user_id: this.state.currentUserId
+
     }
-    postAPICall('updatecrptosetting',alltxtData)
+    postAPICall('cryptoSetting',alltxtData)
     .then(response => {
-      if(response.data.query_status){
-        let alltxtData = {
-          admin_user_id : this.state.currentUserId
-        }
-        postAPICall('gettoken',alltxtData)
+      if(response.status==200){
+    console.log(response.data.message,"success")
+        getAPICall('getCryptoSetting')
         .then(response => {
-          const rowData = response.data;
+          const rowData = response.data.crypto;
           if(rowData){
             this.setState({ rowData });
           }

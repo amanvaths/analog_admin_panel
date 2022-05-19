@@ -43,7 +43,7 @@ import { getAPICall, postAPICall } from "../../../redux/helpers/api_functions"
 import { connect } from "react-redux"
 import { mobileStyle } from "../../forms/form-elements/number-input/InputStyles"
 
-class UsersList extends React.Component {
+class NotificationList extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (
       props.currentUserId !== state.currentUserId
@@ -720,4 +720,4 @@ const mapStateToProps = state => {
     currentUserId: state.auth.login.user.user_id
   }
 }
-export default connect(mapStateToProps)(UsersList)
+export default connect(mapStateToProps)(NotificationList)

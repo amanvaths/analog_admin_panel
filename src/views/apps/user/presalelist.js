@@ -101,8 +101,28 @@ class UsersList extends React.Component {
         width: 250,
       },
       {
+      headerName: "Status",
+      field: "status",
+      filter: true,
+      width: 150,
+      cellRendererFramework: params => {
+        return params.value == true ? ( // for active
+          <div className="badge badge-pill badge-light-success">Success</div>
+        ) : params.value == false ? ( // Not submitted
+          <div className="badge badge-pill badge-light-danger">Failed</div>
+        ) : null
+      }
+    },
+      {
         headerName: "Coin Quantity",
         field: "coinquantity",
+        filter: true,
+        editable: true,
+        width: 250,
+      },
+      {
+        headerName: "Coin Remaining",
+        field: "coinremaining",
         filter: true,
         editable: true,
         width: 250,
@@ -115,7 +135,7 @@ class UsersList extends React.Component {
         width: 250,
       },
       {
-        headerName: "Duration",
+        headerName: "Duration(Days)",
         field: "duration",
         filter: true,
         editable: true,

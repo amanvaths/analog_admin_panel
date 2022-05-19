@@ -107,19 +107,19 @@ class SideMenuContent extends React.Component {
     })
   }
 
-  componentDidMount() {
-    const newdata = {
-      user_id : this.props.currentUserId
-    }
-    postAPICall('user/get-profile-info',newdata)
-    .then(response => {
-      const permissionEM = response.data.params?.profile_info?.admin_permission  ;
-      if(permissionEM){
-        this.setState({ permissionEM });
-      }
-    })
-    this.initRender(this.parentArr[0] ? this.parentArr[0] : [])
-  }
+  // componentDidMount() {
+  //   const newdata = {
+  //     user_id : this.props.currentUserId
+  //   }
+  //   postAPICall('user/get-profile-info',newdata)
+  //   .then(response => {
+  //     const permissionEM = response.data.params?.profile_info?.admin_permission  ;
+  //     if(permissionEM){
+  //       this.setState({ permissionEM });
+  //     }
+  //   })
+  //   this.initRender(this.parentArr[0] ? this.parentArr[0] : [])
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.activePath !== this.props.activePath) {

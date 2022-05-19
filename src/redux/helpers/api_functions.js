@@ -7,8 +7,8 @@ import axios from "axios";
 // const url = "https://api.bullsiex.io/api/";
 // const url = "https://api.bitflash.io/api/";
 // const url = "https://api.kingvrx.com/api"
-//export const BaseURLAPI =  'https://adminapi.btexapi.cloud/api';
- export const BaseURLAPI =  'http://localhost:3001/api';
+// export const BaseURLAPI =  'https://adminapi.btexapi.cloud/api';
+export const BaseURLAPI =  'http://localhost:3001/api';
 
 export const BaseURL =  'https://btexapi.cloud' ;
 export const WebsiteURL =  'https://bitflash.io' ;

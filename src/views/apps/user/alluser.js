@@ -5,6 +5,9 @@ import {
   CardHeader,
   CardTitle,
   FormGroup,
+  Form,
+  Select,
+  Button,
   Label,
   Input,
   Row,
@@ -52,6 +55,7 @@ class UsersList extends React.Component {
     gridApi: null,
     pageSize: 50,
     isVisible: true,
+    totalCount:0,
     reload: true,
     collapse: true,
     status: "Opened",
@@ -67,7 +71,7 @@ class UsersList extends React.Component {
       {
         headerName: "#",
         field: "rowIndex",
-        // filter : true,
+         filter : true,
         width: 50,
         cellRendererFramework: (params) => {
           return <>{1 + params?.rowIndex}</>;
@@ -279,7 +283,7 @@ class UsersList extends React.Component {
                 size={28}
                 onClick={() => {
                   let editurl =
-                    "/app/user/edit/UserEdit?user_id=" + params.data.user_id;
+                    "/app/user/edit/UserEdit?email=" + params.data.email;
                   history.push(editurl);
                 }}
               />
@@ -296,7 +300,7 @@ class UsersList extends React.Component {
                   className="mr-2"
                   size={28}
                   onClick={() => {
-                    this.BlockUser("update_profile", params.data.email, 2);
+                    this.BlockUser(params.data.email, 2);
                   }}
                 />
               )}
@@ -315,9 +319,10 @@ class UsersList extends React.Component {
 
   async componentDidMount() {
      let params1 = "?per_page=" + this.state.pageSize + "&page=1";
-    getAPICall("alluser"+ params1).then((response) => {
+    getAPICall("getUser"+ params1).then((response) => {
       const rowData = response.data;
       this.setState({ rowData });
+      // this.setState({totalCount:rowData.length})
     });
   }
 
@@ -345,11 +350,11 @@ class UsersList extends React.Component {
             const fV = field[1]?.filter;
             params = `${params}&${f}=${fV}`;
           })
-          getAPICall("alluser"+params).then((res) => {
+          getAPICall("getUser"+params).then((res) => {
           console.log(params,"pauihfhed"); 
 
             console.log("Ressss:: ", res)
-            rowData.successCallback([...res.data.user_data], res.data.totalCount);
+            rowData.successCallback([...res.data.user], res.data.user.length);
           });
         },
       };
@@ -383,9 +388,10 @@ class UsersList extends React.Component {
   updateSearchQuery = (val) => {
     console.log(val);
      let params = "?per_page=" + this.state.pageSize + "&page=1" + "&keyword="+val; 
-    getAPICall("alluser"+ params).then((response) => {
+    getAPICall("getUser"+ params).then((response) => {
       const rowData = response.data;
       this.setState({ rowData });
+      this.api.setRowData(rowData);
     });
     /* this.gridApi.setQuickFilter(val)
     this.setState({
@@ -448,17 +454,17 @@ class UsersList extends React.Component {
       this.setState({ validPassword: true });
     }
   };
-  BlockUser = (action, email, status) => {
+  BlockUser = ( email, status) => {
+    console.log(email,status,"hello")
     let alltxtData = {};
-    if (!action && !email) {
+    if (!email) {
       NotificationManager.error("Please Fill All Information");
     } else {
-      alltxtData.action = action;
       alltxtData.email = email;
       alltxtData.status = status;
-      alltxtData.admin_user_id = this.state.currentUserId;
-      postAPICall("modify_user_profile", alltxtData).then((response) => {
-        if (response.data.status == 200) {
+      // alltxtData.admin_user_id = this.state.currentUserId;
+      postAPICall("blockuser", alltxtData).then((response) => {
+        if (response.status == 200) {
           let selectedData = this.gridApi.getSelectedRows();
           this.gridApi.updateRowData({ remove: selectedData });
           NotificationManager.success(response.data.message);
@@ -469,6 +475,50 @@ class UsersList extends React.Component {
       this.setState({ validPassword: true });
     }
   };
+  clear(){
+    // let self = this;
+    let dataSource = {
+        getRows(rowData) {
+            rowData.successCallback([],0);
+        }
+    };
+    this.state.gridApi.setDatasource(dataSource);
+}
+
+  updateQUERY(start,end){
+    const sDate =new Date(start).toISOString().substring(0,10)
+    const eDate = new Date(end).toISOString().substring(0,10)
+   
+    // this.clear();
+ 
+    if(start==null || end ==null){
+      NotificationManager.error("Missing credentials.")
+    }else{
+      getAPICall("getUser?start="+sDate +"&endDate="+eDate).then((res)=>{
+    
+        if(res.data.status == 200) {
+          let dataSource = {
+            getRows(rowData) {
+                rowData.successCallback(res.data.user,res.data.user.length);
+            }
+        };
+    
+          this.state.gridApi.setDatasource(dataSource);
+          // this.setState({ rowData:res.data.user });
+        }
+      }
+      ).catch((err)=> console.log(err,"err"))
+    }
+   
+  
+  
+    
+  };
+  
+    //   successCallback([...res.data.user], res.data.user.length);
+    // }).catch((err)=>console.log(err,"err"))
+  
+
   render() {
     const { rowData, columnDefs, defaultColDef, pageSize, gridApi } =
       this.state;
@@ -476,11 +526,62 @@ class UsersList extends React.Component {
       <Row className="app-user-list">
         <Col sm="12"></Col>
         <Col sm="12">
+        <Card>
+              <CardBody>
+                <Form className="row">
+        
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="from" className="h5">
+                       FROM
+                      </Label>
+                      <Input
+                        type="date"
+                        id="from"
+                        placeholder="From Date"
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="to" className="h5">
+                        To
+                      </Label>
+                      <Input
+                        type="date"
+                        id="to"
+                        placeholder="To Date"
+                        // invalid={this.state.validPassword === false}
+                      />
+                      
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Button.Ripple
+                        color="primary"
+                        type="button"
+                        className="mt-2"
+                        onClick={() => {
+                          this.updateQUERY(
+                            document.querySelector("#from").value? document.querySelector("#from").value:null,
+                            document.querySelector("#to").value? document.querySelector("#to").value:null
+                          );
+                        }}
+                      >
+                        Find User
+                      </Button.Ripple>
+                    </FormGroup>
+                  </Col>
+                </Form>
+              </CardBody>
+            </Card>
+        </Col>
+        <Col sm="12">
           <Card>
-            <CardBody style={{ height: "85vh" }}>
+            <CardBody>
               <div
                 className="ag-theme-material ag-grid-table"
-                style={{ height: "80vh" }}
               >
                 <div className="ag-grid-actions d-flex justify-content-between flex-wrap mb-1">
                   <div className="sort-dropdown">
@@ -520,9 +621,10 @@ class UsersList extends React.Component {
                   <div className="">
                     <div className="h2 float-left">
                       Total Users :{" "}
-                      {this.state.rowData !== null
-                        ? this.state.rowData.totalCount
-                        : 0}
+                      {/* {this.state.rowData !== null
+                        ? this.state.rowData.length
+                        : 0} */}
+                        {this.setState.totalCount?this.state.totalCount:0}
                     </div>
                   </div>
                   <div className="filter-actions d-flex">
@@ -582,7 +684,7 @@ class UsersList extends React.Component {
                         pagination={true}
                         pivotPanelShow="always"
                         paginationPageSize={pageSize}
-                        cacheBlockSize={pageSize}
+                        cacheBlockSize={rowData}
                         rowModelType={"infinite"}
                         onPageChage={this.handleChange}
                         rowHeight={60}

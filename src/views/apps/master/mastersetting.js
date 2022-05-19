@@ -99,20 +99,20 @@ class UsersList extends React.Component {
     ]
   }
 
-  async componentDidMount() {
-    const postdata = {
-      wallet_password: 1,
-      admin_user_id: this.state.currentUserId,
-      user_id: this.state.currentUserId
-    }
-    postAPICall('user/get-profile-info',postdata)
-    .then(response => {
-      const profile_info = response.data?.params?.profile_info;
-      if(profile_info){
-        this.setState({ profile_info });
-      }
-    })
-  }
+  // async componentDidMount() {
+  //   const postdata = {
+  //     wallet_password: 1,
+  //     admin_user_id: this.state.currentUserId,
+  //     user_id: this.state.currentUserId
+  //   }
+  //   postAPICall('user/get-profile-info',postdata)
+  //   .then(response => {
+  //     const profile_info = response.data?.params?.profile_info;
+  //     if(profile_info){
+  //       this.setState({ profile_info });
+  //     }
+  //   })
+  // }
 
   onGridReady = params => {
     this.gridApi = params.api

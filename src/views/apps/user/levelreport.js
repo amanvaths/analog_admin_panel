@@ -50,8 +50,8 @@ class LevelReport extends React.Component {
   state = {
     rowData: null,
     gridApi: null,
+    level:0,
     pageSize: 50,
-    level:1,
     isVisible: true,
     reload: true,
     collapse: true,
@@ -94,261 +94,93 @@ class LevelReport extends React.Component {
       //     );
       //   },
       // },
-
-       //{
-    //     headerName: "Total Withdrawal",
-    //     field: "total_withdrawal",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
-    //   {
-    //     headerName: "Email",
-    //     field: "email",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
+      {
+        headerName: "Email",
+        field: "email",
+        filter: true,
+        editable: true,
+        width: 250,
+      },
+      {
+      headerName: "Status",
+      field: "status",
+      filter: true,
+      width: 150,
+      cellRendererFramework: params => {
+        return params.value == true ? ( // for active
+          <div className="badge badge-pill badge-light-success">Success</div>
+        ) : params.value == false ? ( // Not submitted
+          <div className="badge badge-pill badge-light-danger">Failed</div>
+        ) : null
+      }
+    },
+    {
+      headerName: "From User",
+      field: "from_user",
+      filter: true,
+      editable: true,
+      width: 200,
+    },
+    {
+    headerName: "Token Price",
+    field: "token_price",
+    filter: true,
+    editable: true,
+    width: 200,
+  },
+  {
+    headerName: "Token Quantity",
+    field: "token_quantity",
+    filter: true,
+    editable: true,
+    width: 250,
+  },
+    
+    
+    {
+      headerName: "Bonus",
+      field: "bonus",
+      filter: true,
+      editable: true,
+      width: 250,
+    },
+    
       // {
-      //   headerName: "Name",
-      //   field: "first_name",
-      //   editable: true,
-      //   filter: true,
-      //   width: 250,
+      //   headerName: "Edit/Delete",
+      //   field: "transactions",
+      //   width: 200,
       //   cellRendererFramework: (params) => {
+      //     console.log(params,"paramsf")
+
       //     return (
       //       <div className="actions cursor-pointer">
-      //         {params.data?.first_name} {params.data?.middle_name}{" "}
-      //         {params.data?.last_name}
+      //         <Edit
+      //           className="mr-2"
+      //           size={28}
+      //            onClick={() => {
+      //              let editurl =
+      //                "/app/user/editpresale:" + params.data._id;
+      //              history.push(editurl);
+      //            }}
+      //         />
+      //         <Trash2
+      //           size={28}
+      //           onClick={() => {
+      //             this.deleteUser("delete_user", params.data._id, -2);
+      //           }}
+      //         />
       //       </div>
       //     );
       //   },
       // },
-    //   {
-    //     headerName: "Status",
-    //     field: "user_status",
-    //     filter: true,
-    //     width: 150,
-    //     cellRendererFramework: (params) => {
-    //       return params.value == 1 || params.value == 0 ? ( // for active
-    //         <div className="badge badge-pill badge-light-success">Active</div>
-    //       ) : params.value == 0 ? (
-    //         <div className="badge badge-pill badge-light-danger">
-    //           Not Active
-    //         </div>
-    //       ) : params.value == -2 ? (
-    //         <div className="badge badge-pill badge-light-danger">Deleted</div>
-    //       ) : params.value == -1 ? (
-    //         <div className="badge badge-pill badge-light-warning">Archive</div>
-    //       ) : params.value == 2 ? (
-    //         <div className="badge badge-pill badge-light-danger">Blocked</div>
-    //       ) : null;
-    //     },
-        
-        // cellRendererFramework: params => {
-        //   return params.value === 1 ? (
-        //     <div className="badge badge-pill badge-light-success">
-        //       Active
-        //     </div>
-        //   ) : params.value === 0 ? (
-        //     <div className="badge badge-pill badge-light-warning">
-        //       Not Active
-        //     </div>
-        //   ) : params.value === 2 ? (
-        //     <div className="badge badge-pill badge-light-danger">
-        //       Blocked
-        //     </div>
-        //   ) : null
-        // }
-      //},
-    //   {
-    //     headerName: "Total Wallet Fund",
-    //     field: "total_wallet_fund",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
-    //   {
-    //     headerName: "Total Buying",
-    //     field: "total_buying",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
-    //   {
-    //     headerName: "Total Bonus",
-    //     field: "total_bonus",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
-    //   {
-    //     headerName: "Total Withdrawal",
-    //     field: "total_withdrawal",
-    //     filter: true,
-    //     editable: true,
-    //     width: 250,
-    //   },
-
-      // {
-      // {
-      //   headerName: "Email Verified",
-      //   field: "is_email_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "KYC Verified",
-      //   field: "is_kyc_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "Auto KYC",
-      //   field: "auto_verify",
-      //   filter: true,
-      //   width: 130,
-      //   cellRendererFramework: (params) => {
-      //     return params.value == true ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : (
-      //       // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "Bank Verified",
-      //   field: "is_bank_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "Mobile Number",
-      //   field: "mobile_number",
-      //   editable: true,
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 0 ? (
-      //       <div className=""> </div>
-      //     ) : (
-      //       <div className="">{params.value}</div>
-      //     );
-      //   },
-      // },
-    //   {
-    //     headerName: "Edit/Block/Delete",
-    //     field: "transactions",
-    //     width: 200,
-    //     cellRendererFramework: (params) => {
-    //       return (
-    //         <div className="actions cursor-pointer">
-    //           <Edit
-    //             className="mr-2"
-    //             size={28}
-    //             onClick={() => {
-    //               let editurl =
-    //                 "/app/user/edit/UserEdit?user_id=" + params.data.user_id;
-    //               history.push(editurl);
-    //             }}
-    //           />
-    //           {params.data?.user_status == 2 ? (
-    //             <UserCheck
-    //               className="mr-2"
-    //               size={28}
-    //               onClick={() => {
-    //                 this.BlockUser("update_profile", params.data.email, 1);
-    //               }}
-    //             />
-    //           ) : (
-    //             <UserX
-    //               className="mr-2"
-    //               size={28}
-    //               onClick={() => {
-    //                 this.BlockUser("update_profile", params.data.email, 2);
-    //               }}
-    //             />
-    //           )}
-    //           <Trash2
-    //             size={28}
-    //             onClick={() => {
-    //               this.deleteUser("delete_user", params.data.user_id, -2);
-    //             }}
-    //           />
-    //         </div>
-    //       );
-    //     },
-    //   },
-    {
-            headerName: "From UserEmail",
-            field: "from_useremail",
-            filter: true,
-            editable: true,
-            width: 250,
-          },
-          {
-            headerName: "To UserEmail",
-            field: "to_useremail",
-            filter: true,
-            editable: true,
-            width: 250,
-          },
-          {
-            headerName: "Amount",
-            field: "amount",
-            filter: true,
-            editable: true,
-            width: 250,
-          },
-          {
-            headerName: "Date",
-            field: "date",
-            filter: true,
-            editable: true,
-            width: 250,
-          },
-
     ],
   };
 
   async componentDidMount() {
-    let params1 = "?per_page=" + this.state.pageSize + "&page=1";
-    getAPICall("alluser" + params1).then((response) => {
-      const rowData = response.data;
+     let params1 = "?per_page=" + this.state.pageSize + "&page=1";
+    getAPICall("getIncome"+ params1).then((response) => {
+        console.log(response,"resp..")
+      const rowData = response.data.ref;
       this.setState({ rowData });
     });
   }
@@ -368,6 +200,7 @@ class LevelReport extends React.Component {
           // params.endRow : End Page
           console.log("params", rowData, rowData.filterModel);
           const models = Object.entries(rowData.filterModel);
+          console.log(models,"models")
           
           const page = rowData.endRow / this.state.pageSize;
           let params = "?per_page=" + this.state.pageSize + "&page=" + page;
@@ -376,10 +209,10 @@ class LevelReport extends React.Component {
             const fV = field[1]?.filter;
             params = `${params}&${f}=${fV}`;
           })
-          console.log(params);
-          getAPICall("alluser" + params).then((res) => {
+          //console.log(params);  + params
+          getAPICall("getIncome",params).then((res) => {
             console.log("Ressss:: ", res)
-            rowData.successCallback([...res.data.user_data], res.data.totalCount);
+            rowData.successCallback([...res.data.ref], res.data.totalCount);
           });
         },
       };
@@ -401,12 +234,6 @@ class LevelReport extends React.Component {
     filter.setModel(modelObj);
     this.gridApi.onFilterChanged();
   };
-  setlevel = (value)=>{
-    this.setState({
-        level: value,
-      });
-      console.log(value,"value")
-  };
 
   filterSize = (val) => {
     if (this.gridApi) {
@@ -415,12 +242,11 @@ class LevelReport extends React.Component {
         pageSize: val,
       });
     }
-    
   };
   updateSearchQuery = (val) => {
     console.log(val);
-    let params = "?per_page=" + this.state.pageSize + "&page=1" + "&keyword="+val;
-    getAPICall("alluser" + params).then((response) => {
+     let params = "?per_page=" + this.state.pageSize + "&page=1" + "&keyword="+val; 
+    getAPICall("getpresale"+ params).then((response) => {
       const rowData = response.data;
       this.setState({ rowData });
     });
@@ -473,11 +299,13 @@ class LevelReport extends React.Component {
       alltxtData.user_id = user_id;
       alltxtData.status = status;
       alltxtData.admin_user_id = this.state.currentUserId;
-      postAPICall("permanent_delete_user", alltxtData).then((response) => {
-        if (response.data.status == 200) {
+      getAPICall("deletepresale?_id="+user_id).then((response) => {
+        console.log(response.data,"responsedata")
+        if (response.data.status == 'true') {
           let selectedData = this.gridApi.getSelectedRows();
           this.gridApi.updateRowData({ remove: selectedData });
           NotificationManager.success("Employee Deleted Successfully");
+          setTimeout(()=>{ window.location.reload()},1500)
         } else {
           NotificationManager.error(response.data.message);
         }
@@ -485,26 +313,31 @@ class LevelReport extends React.Component {
       this.setState({ validPassword: true });
     }
   };
-  BlockUser = (action, email, status) => {
-    let alltxtData = {};
-    if (!action && !email) {
-      NotificationManager.error("Please Fill All Information");
-    } else {
-      alltxtData.action = action;
-      alltxtData.email = email;
-      alltxtData.status = status;
-      alltxtData.admin_user_id = this.state.currentUserId;
-      postAPICall("modify_user_profile", alltxtData).then((response) => {
-        if (response.data.status == 200) {
-          let selectedData = this.gridApi.getSelectedRows();
-          this.gridApi.updateRowData({ remove: selectedData });
-          NotificationManager.success(response.data.message);
-        } else {
-          NotificationManager.error(response.data.message);
-        }
+
+  
+  setlevel =  (value)=>{
+    this.setState({
+        level: value,
       });
-      this.setState({ validPassword: true });
-    }
+      console.log(value,"value")
+       getAPICall("getIncome?bonus_type=Level&from_level="+ value).then((d)=>{
+        if(d.status === 200){
+         
+          const income = d.data.ref;
+         
+            this.setState({ rowData: income})
+            let dataSource = {
+             
+              getRows(rowData) {
+                  rowData.successCallback(d.data.ref,d.data.ref.length);
+              }
+
+          };
+          this.state.gridApi.setDatasource(dataSource);
+
+       
+        }
+      }).catch((e) => console.log(e));
   };
   render() {
     const { rowData, columnDefs, defaultColDef, pageSize, gridApi } =
@@ -554,23 +387,10 @@ class LevelReport extends React.Component {
                       </DropdownMenu>
                     </UncontrolledDropdown>
                   </div>
-                  <div className="">
-                    <div className="h2 float-left">
-                      Level Report (Level-{this.state.level})
-                    </div>
-                  </div>
-                  <div className="filter-actions d-flex">
-                    {/* <Input
-                      className="w-50 mr-1 mb-1 mb-sm-0"
-                      type="text"
-                      placeholder="search..."
-                      onBlur={(e) => this.updateSearchQuery(e.target.value)}
-                      defaultValue={this.state.searchVal}
-                    /> */}
-                     <div className="dropdown actions-dropdown">
+                  <div className="dropdown actions-dropdown">
                       <UncontrolledButtonDropdown>
                         <DropdownToggle className="px-2 py-75" color="white">
-                          Level
+                          select-Level
                           <ChevronDown className="ml-50" size={15} />
                         </DropdownToggle>
                         <DropdownMenu right>
@@ -582,13 +402,26 @@ class LevelReport extends React.Component {
                             <span className="align-middle ml-50" onClick={() => this.setlevel(2)}>Level-2</span>
                           </DropdownItem>
                           <DropdownItem tag="a">
-                            <span className="align-middle ml-50" onClick={() => this.setlevel(3)}>level-3</span>
+                            <span className="align-middle ml-50"onClick={() => this.setlevel(3)}>level-3</span>
                           </DropdownItem>
                          
                         </DropdownMenu>
                       </UncontrolledButtonDropdown>
                     </div>
-                    {/* <div className="dropdown actions-dropdown">
+                  <div className="">
+                    <div className="h2 float-left">
+                     Level Report:{this.state.level==0?"All user":"Level-"+this.state.level}
+                    </div>
+                  </div>
+                  <div className="filter-actions d-flex">
+                    <Input
+                      className="w-50 mr-1 mb-1 mb-sm-0"
+                      type="text"
+                      placeholder="search..."
+                      onBlur={(e) => this.updateSearchQuery(e.target.value)}
+                      defaultValue={this.state.searchVal}
+                    />
+                    <div className="dropdown actions-dropdown">
                       <UncontrolledButtonDropdown>
                         <DropdownToggle className="px-2 py-75" color="white">
                           Actions
@@ -618,7 +451,7 @@ class LevelReport extends React.Component {
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledButtonDropdown>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
                 {this.state.rowData !== null ? (
@@ -653,7 +486,7 @@ class LevelReport extends React.Component {
                       <Spinner color="primary" />
                     </div>
                     <h2 className="float-left ml-1">
-                      System is Calculating Level Report.
+                      System is Calculating All Users.
                     </h2>
                   </>
                 )}
@@ -672,3 +505,4 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(LevelReport);
+

@@ -34,6 +34,7 @@ function EditPresale(){
  const[coinQuantity,setCoinQuantity] = useState("");
  const[coinPrice,setCoinPrice] = useState("");
  const[duration,setDuration] = useState("");
+ const [status,editStatus] = useState("");
 //  const[submitResp,setSubmitResp] = useState({});
  
 
@@ -48,6 +49,7 @@ useEffect(()=>{
                 setCoinQuantity(response.coinquantity);
                 setCoinPrice(response.price);
                 setDuration(response.duration);
+                editStatus(response.status)
             })
 
 },[])
@@ -141,6 +143,17 @@ function submitHandler(e){
                       onChange={(e)=>setDuration(e.target.value)}
                       value={duration}
                     />
+                  </div>
+                </div>
+                <div className="form-group row d-flex justify-content-center">
+                  <Label for="status" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                    Status
+                  </Label>
+                  <div className="col-sm-10 col-md-6">
+                    <select selected={status} onChange={(e)=>{editStatus(e.target.value)}} id="status" className="form-control" >
+                      <option value="0">In-active</option>
+                      <option value="1">Active</option>
+                    </select>
                   </div>
                 </div>
                 <div className="btnClass d-flex justify-content-center">

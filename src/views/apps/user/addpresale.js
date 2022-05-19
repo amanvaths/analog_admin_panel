@@ -7,6 +7,7 @@ import {
   Row,
   Form,
   Col,
+  Select,
   Spinner,
 } from "reactstrap";
 import axios from "axios";
@@ -26,20 +27,22 @@ class addpresale extends React.Component {
      levelName:"",
      coinQty:"",
      coinPrice:"",
-     duration:""
+     duration:"",
+     status:""
      
  };
  submitHandler(e){
      e.preventDefault();
-     let{levelName,coinQty,coinPrice,duration} =this.state;
-     if(levelName=="" || coinQty=="" || coinPrice=="" || duration==""){
+     let{levelName,coinQty,coinPrice,duration,status} =this.state;
+     console.log(status,"statt")
+     if(levelName=="" || coinQty=="" || coinPrice=="" || duration=="" || status==""){
         NotificationManager.warning("Please fill the field Properly.")
      }
      else{
-        axios.post(BaseURLAPI +"/addpresale",{levelname:levelName,coinquantity:coinQty,coinprice:coinPrice,duration:duration}).then((res)=>{
+        axios.post(BaseURLAPI +"/addpresale",{levelname:levelName,coinquantity:coinQty,coinprice:coinPrice,duration:duration,status:status}).then((res)=>{
             console.log(res.data,"response.....");
             NotificationManager.success("Pre-sale added successfully.")
-            setTimeout(()=>{ window.location.reload();},1000)
+            // setTimeout(()=>{ window.location.reload();},1000)
         }).catch((err)=>{
           NotificationManager.error("Something went wrong.")
         })
@@ -101,7 +104,7 @@ class addpresale extends React.Component {
                       type="text"
                       className="form-control px-1"
                       id="coinPrice"
-                      pattern="/^\d*\.?\d*$/"
+                      // pattern="/^\d*\.?\d*$/"
                       title="Coin price can be in number or digits"
                       placeholder="Coin Price"
                       onChange={(e)=>{this.state.coinPrice=e.target.value;}}
@@ -122,6 +125,18 @@ class addpresale extends React.Component {
                       onChange={(e)=>this.state.duration=e.target.value}
                       value={this.duration}
                     />
+                  </div>
+                </div>
+                <div className="form-group row d-flex justify-content-center">
+                  <Label for="status" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                    Status
+                  </Label>
+                  <div className="col-sm-10 col-md-6">
+                    <select onChange={(e)=>{this.state.status=e.target.value;}} id="status" className="form-control" >
+                      <option value="" disabled selected>Select</option>
+                      <option value="0">In-active</option>
+                      <option value="1">Active</option>
+                    </select>
                   </div>
                 </div>
                 <div className="btnClass d-flex justify-content-center">

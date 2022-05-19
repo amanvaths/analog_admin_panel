@@ -168,6 +168,10 @@ const pendingwithdraw   = lazy(() => import("./views/apps/withdraw/pendingwithdr
 const rejectedwithdraw  = lazy(() => import("./views/apps/withdraw/rejectedwithdraw"))
 const verifiedwithdraw  = lazy(() => import("./views/apps/withdraw/verifiedwithdraw"))
 
+const NotificationForm = lazy(() => import("./views/apps/notification/NotificationForm"))
+const NotificationList = lazy(() => import("./views/apps/notification/NotificationList"))
+const NewsList = lazy(() => import("./views/apps/notification/NewsList"))
+// const createNotifivation = lazy(() => import("./views/apps/notification/"))
 const alluser = lazy(() => import("./views/apps/user/alluser"))
 const blockuser     = lazy(() => import("./views/apps/user/blockuser"))
 const levelreport = lazy(() => import("./views/apps/user/levelreport"))
@@ -195,6 +199,7 @@ const createPairing      = lazy(() => import("./views/apps/token/createpairing")
 const setPairing      = lazy(() => import("./views/apps/token/setpairing"))
 
 const openbuy      = lazy(() => import("./views/apps/order/openbuy"))
+
 const opensell      = lazy(() => import("./views/apps/order/opensell"))
 const excutedbuysell      = lazy(() => import("./views/apps/order/excutedbuysell"))
 const canclebuyorder      = lazy(() => import("./views/apps/order/canclebuyorder"))
@@ -458,6 +463,9 @@ class AppRouter extends React.Component {
           <AppRoute path="/app/withdraw/verifiedwithdraw" component={verifiedwithdraw}  />
           <AppRoute path="/app/withdraw/rejectedwithdraw" component={rejectedwithdraw}  />
 
+          <AppRoute path="/app/notificationform" component={NotificationForm} />
+          <AppRoute path="/app/notification" component={NotificationList} />
+          <AppRoute path="/app/news" component={NewsList} />
           <AppRoute path="/app/user/alluser" component={alluser} />
           <AppRoute path="/app/user/levelreport" component={levelreport} />
           <AppRoute path="/app/user/addpresale" component={addpresale} />
@@ -488,6 +496,7 @@ class AppRouter extends React.Component {
           <AppRoute path="/app/token/setpairing" component={setPairing} />
 
           <AppRoute path="/app/order/openbuy" component={openbuy} />
+
           <AppRoute path="/app/order/opensell" component={opensell} />
           <AppRoute path="/app/order/excutedbuysell" component={excutedbuysell} />
           <AppRoute path="/app/order/canclebuyorder" component={canclebuyorder} />
