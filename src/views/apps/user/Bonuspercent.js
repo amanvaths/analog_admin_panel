@@ -37,6 +37,7 @@ function Bonuspercent(){
  const[hoLevel1,setHoLevel1] = useState("");
  const[hoLevel2,setHoLevel2] = useState("");
  const[hoLevel3,setHoLevel3] = useState("");
+ const[loader,setLoader]=useState(true);
  
  const[submitResp,setSubmitResp] = useState({});
  console.log(level1,"hello")
@@ -53,9 +54,10 @@ useEffect(()=>{
                setHoLevel1(response.ho_level1);
                setHoLevel2(response.ho_level2);
                setHoLevel3(response.ho_level3);
+               setLoader(false)
             })
 
-},[submitResp])
+},[submitResp]);
 
 function submitHandler(e){
      e.preventDefault();
@@ -82,7 +84,10 @@ function submitHandler(e){
     return (
       <Row className="app-user-list justify-content-center">
         <Col sm="12"></Col>
-        <Col sm="12" md="6">
+       {!loader ? 
+       (
+         <>
+       <Col sm="12" md="6">
           <Card>
             <CardBody className="h-100" style={{ height: "90vh" }}>
               <h1 className="text-center">Bonus Percent</h1>
@@ -216,6 +221,18 @@ function submitHandler(e){
             </CardBody>
           </Card>
         </Col>
+        </>):
+        (
+          <>
+            <div className="float-left">
+              <Spinner color="primary" />
+            </div>
+            <h2 className="float-left ml-1">
+              System is loading Date.
+            </h2>
+          </>
+        )
+        }
       </Row>
     );
   }
@@ -227,4 +244,4 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(Bonuspercent);
-//export default Bonuspercent;
+

@@ -9,6 +9,8 @@ import {
   Input,
   Row,
   Col,
+  Button,
+  Form,
   UncontrolledDropdown,
   UncontrolledButtonDropdown,
   DropdownMenu,
@@ -101,19 +103,19 @@ class LevelReport extends React.Component {
         editable: true,
         width: 250,
       },
-      {
-      headerName: "Status",
-      field: "status",
-      filter: true,
-      width: 150,
-      cellRendererFramework: params => {
-        return params.value === 1 ? ( // for active
-          <div className="badge badge-pill badge-light-success">Success</div>
-        ) : params.value === 0 ? ( // Not submitted
-          <div className="badge badge-pill badge-light-danger">Failed</div>
-        ) : null
-      }
-    },
+    //   {
+    //   headerName: "Status",
+    //   field: "status",
+    //   filter: true,
+    //   width: 150,
+    //   cellRendererFramework: params => {
+    //     return params.value === 1 ? ( // for active
+    //       <div className="badge badge-pill badge-light-success">Success</div>
+    //     ) : params.value === 0 ? ( // Not submitted
+    //       <div className="badge badge-pill badge-light-danger">Failed</div>
+    //     ) : null
+    //   }
+    // },
     {
       headerName: "From User",
       field: "from_user",
@@ -121,6 +123,14 @@ class LevelReport extends React.Component {
       editable: true,
       width: 200,
     },
+    {
+      headerName: "Level",
+      field: "from_level",
+      filter: true,
+      editable: true,
+      width: 250,
+    },
+
     {
       headerName: "Token Quantity",
       field: "token_quantity",
@@ -185,11 +195,11 @@ class LevelReport extends React.Component {
             params = `${params}&${f}=${fV}`;
           })
           //console.log(params);  + params
-          getAPICall("getIncome"+params).then((res) => {
+          getAPICall("getIncome"+params +"&from_level=1&from_level=2&from_level=3").then((res) => {
             console.log("Ressss:: ", res)
-            //this.setState({rowData:res.data.ref})
+            this.setState({rowData:res.data.ref})
            
-             rowData.successCallback([...res.data.ref], res.data.totalCount);
+              rowData.successCallback([...res.data.ref], res.data.ref.length);
           }).catch((err)=>NotificationManager("something went wrong."))
         },
       };
@@ -267,29 +277,29 @@ class LevelReport extends React.Component {
   removeCard = () => {
     this.setState({ isVisible: false });
   };
-  deleteUser = (action, user_id, status) => {
-    let alltxtData = {};
-    if (!action && !user_id) {
-      NotificationManager.error("Please Fill All Information");
-    } else {
-      alltxtData.action = action;
-      alltxtData.user_id = user_id;
-      alltxtData.status = status;
-      alltxtData.admin_user_id = this.state.currentUserId;
-      getAPICall("deletepresale?_id="+user_id).then((response) => {
-        console.log(response.data,"responsedata")
-        if (response.data.status == 'true') {
-          let selectedData = this.gridApi.getSelectedRows();
-          this.gridApi.updateRowData({ remove: selectedData });
-          NotificationManager.success("Employee Deleted Successfully");
-          setTimeout(()=>{ window.location.reload()},1500)
-        } else {
-          NotificationManager.error(response.data.message);
-        }
-      });
-      this.setState({ validPassword: true });
-    }
-  };
+  // deleteUser = (action, user_id, status) => {
+  //   let alltxtData = {};
+  //   if (!action && !user_id) {
+  //     NotificationManager.error("Please Fill All Information");
+  //   } else {
+  //     alltxtData.action = action;
+  //     alltxtData.user_id = user_id;
+  //     alltxtData.status = status;
+  //     alltxtData.admin_user_id = this.state.currentUserId;
+  //     getAPICall("deletepresale?_id="+user_id).then((response) => {
+  //       console.log(response.data,"responsedata")
+  //       if (response.data.status == 'true') {
+  //         let selectedData = this.gridApi.getSelectedRows();
+  //         this.gridApi.updateRowData({ remove: selectedData });
+  //         NotificationManager.success("Employee Deleted Successfully");
+  //         setTimeout(()=>{ window.location.reload()},1500)
+  //       } else {
+  //         NotificationManager.error(response.data.message);
+  //       }
+  //     });
+  //     this.setState({ validPassword: true });
+  //   }
+  // };
 
   
   setlevel =  (value)=>{
@@ -317,6 +327,36 @@ class LevelReport extends React.Component {
       }).catch((e) => console.log(e));
   };
 
+  updateQUERY(start,end){
+    const sDate =new Date(start).toISOString().substring(0,10)
+    const eDate = new Date(end).toISOString().substring(0,10)
+   
+    // this.clear();
+ 
+    if(start==null || end ==null){
+      NotificationManager.error("Missing credentials.")
+    }else{
+      getAPICall("getIncome?start="+sDate +"&endDate="+eDate).then((res)=>{
+    
+        if(res.data.status == 200) {
+          let dataSource = {
+            getRows(rowData) {
+                rowData.successCallback(res.data.ref,res.data.ref.length);
+            }
+        };
+    
+          this.state.gridApi.setDatasource(dataSource);
+          // this.setState({ rowData:res.data.user });
+        }
+      }
+      ).catch((err)=> console.log(err,"err"))
+    }
+   
+  
+  
+    
+  };
+
 
   render() {
     const { rowData, columnDefs, defaultColDef, pageSize, gridApi } = this.state;
@@ -324,11 +364,87 @@ class LevelReport extends React.Component {
       <Row className="app-user-list">
         <Col sm="12"></Col>
         <Col sm="12">
+        <Card>
+              <CardBody>
+                <Form className="row">
+        
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="from" className="h5">
+                       FROM
+                      </Label>
+                      <Input
+                        type="date"
+                        id="from"
+                        placeholder="From Date"
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12">
+                    <FormGroup>
+                      <Label for="to" className="h5">
+                        To
+                      </Label>
+                      <Input
+                        type="date"
+                        id="to"
+                        placeholder="To Date"
+                        // invalid={this.state.validPassword === false}
+                      />
+                      
+                    </FormGroup>
+                  </Col>
+                  <Col md="3" sm="12" >
+                    <FormGroup>
+                      <Button.Ripple
+                        color="primary"
+                        type="button"
+                        className="mt-2"
+                        onClick={() => {
+                          this.updateQUERY(
+                            document.querySelector("#from").value? document.querySelector("#from").value:null,
+                            document.querySelector("#to").value? document.querySelector("#to").value:null
+                          );
+                        }}
+                      >
+                        Find Income
+                      </Button.Ripple>
+                    </FormGroup>
+                  </Col>
+
+                  <Col md="3" sm="12" style={{display:"flex",alignItems:"center"}}>
+                  <div className="dropdown actions-dropdown">
+                      <UncontrolledButtonDropdown>
+                        <DropdownToggle className="px-2 py-75" color="white">
+                          select-Level
+                          <ChevronDown className="ml-50" size={15} />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem tag="a">
+                            <span className="align-middle ml-50" onClick={() => this.setlevel(1)}>Level-1</span>
+                          </DropdownItem>
+                          <DropdownItem tag="a">
+                           
+                            <span className="align-middle ml-50" onClick={() => this.setlevel(2)}>Level-2</span>
+                          </DropdownItem>
+                          <DropdownItem tag="a">
+                            <span className="align-middle ml-50"onClick={() => this.setlevel(3)}>level-3</span>
+                          </DropdownItem>
+                         
+                        </DropdownMenu>
+                      </UncontrolledButtonDropdown>
+                    </div>
+                  </Col>
+                </Form>
+              </CardBody>
+            </Card>
+        </Col>
+        <Col sm="12">
           <Card>
-            <CardBody style={{ height: "85vh" }}>
+            <CardBody>
               <div
                 className="ag-theme-material ag-grid-table"
-                style={{ height: "80vh" }}
+               
               >
                 <div className="ag-grid-actions d-flex justify-content-between flex-wrap mb-1">
                   <div className="sort-dropdown">
@@ -365,27 +481,7 @@ class LevelReport extends React.Component {
                       </DropdownMenu>
                     </UncontrolledDropdown>
                   </div>
-                  <div className="dropdown actions-dropdown">
-                      <UncontrolledButtonDropdown>
-                        <DropdownToggle className="px-2 py-75" color="white">
-                          select-Level
-                          <ChevronDown className="ml-50" size={15} />
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem tag="a">
-                            <span className="align-middle ml-50" onClick={() => this.setlevel(1)}>Level-1</span>
-                          </DropdownItem>
-                          <DropdownItem tag="a">
-                           
-                            <span className="align-middle ml-50" onClick={() => this.setlevel(2)}>Level-2</span>
-                          </DropdownItem>
-                          <DropdownItem tag="a">
-                            <span className="align-middle ml-50"onClick={() => this.setlevel(3)}>level-3</span>
-                          </DropdownItem>
-                         
-                        </DropdownMenu>
-                      </UncontrolledButtonDropdown>
-                    </div>
+                
                   <div className="">
                     <div className="h2 float-left">
                      Level Report:{this.state.level==0?" All ": this.state.level}
@@ -432,6 +528,7 @@ class LevelReport extends React.Component {
                     </div>
                   </div>
                 </div>
+            
                 {this.state.rowData !== null ? (
                   <ContextLayout.Consumer>
                     {(context) => (
