@@ -124,21 +124,7 @@ class UsersList extends React.Component {
         field: "status",
         filter: true,
         width: 150,
-        // cellRendererFramework: (params) => {
-        //   return params.value == 1 || params.value == 0 ? ( // for active
-        //     <div className="badge badge-pill badge-light-success">Active</div>
-        //   ) : params.value == 0 ? (
-        //     <div className="badge badge-pill badge-light-danger">
-        //       Not Active
-        //     </div>
-        //   ) : params.value == -2 ? (
-        //     <div className="badge badge-pill badge-light-danger">Deleted</div>
-        //   ) : params.value == -1 ? (
-        //     <div className="badge badge-pill badge-light-warning">Archive</div>
-        //   ) : params.value == 2 ? (
-        //     <div className="badge badge-pill badge-light-danger">Blocked</div>
-        //   ) : null;
-        // },
+       
         
         cellRendererFramework: params => {
           return params.value === 1 ? (
@@ -156,34 +142,41 @@ class UsersList extends React.Component {
           ) : null
         }
       },
+      // {
+      //   headerName: "Total Wallet Fund",
+      //   field: "wallet_balance",
+      //   filter: true,
+      //   editable: true,
+      //   width: 250,
+      // },
       {
         headerName: "Total Wallet Fund",
-        field: "wallet_balance",
+        field: "usdt_wallet",
         filter: true,
         editable: true,
         width: 250,
       },
       {
         headerName: "Total Buying",
-        field: "wallet_balance",
+        field: "total_spend_inr",
         filter: true,
         editable: true,
         width: 250,
       },
       {
         headerName: "Total Bonus",
-        field: "wallet_balance",
+        field: "buying_bonus",
         filter: true,
         editable: true,
         width: 250,
       },
-      {
-        headerName: "Total Withdrawal",
-        field: "wallet_balance",
-        filter: true,
-        editable: true,
-        width: 250,
-      },
+      // {
+      //   headerName: "Total Withdrawal",
+      //   field: "wallet_balance",
+      //   filter: true,
+      //   editable: true,
+      //   width: 250,
+      // },
       {
         headerName: "Date",
         field: "createdAt",
@@ -191,86 +184,7 @@ class UsersList extends React.Component {
         editable: true,
         width: 250,
       },
-      // {
-      // {
-      //   headerName: "Email Verified",
-      //   field: "is_email_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "KYC Verified",
-      //   field: "is_kyc_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "Auto KYC",
-      //   field: "auto_verify",
-      //   filter: true,
-      //   width: 130,
-      //   cellRendererFramework: (params) => {
-      //     return params.value == true ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : (
-      //       // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     );
-      //   },
-      // },
-      // {
-      //   headerName: "Bank Verified",
-      //   field: "is_bank_verified",
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 1 ? ( // for active
-      //       <div className="bullet bullet-sm bullet-success"></div>
-      //     ) : params.value === 0 ? ( // Not submitted
-      //       <div className="bullet bullet-sm bullet-secondary"></div>
-      //     ) : params.value === 2 ? ( // rejecetd
-      //       <div className="bullet bullet-sm bullet-danger"></div>
-      //     ) : params.value === -1 ? ( // submitted but not approve
-      //       <div className="bullet bullet-sm bullet-warning"></div>
-      //     ) : null;
-      //   },
-      // },
-      // {
-      //   headerName: "Mobile Number",
-      //   field: "mobile_number",
-      //   editable: true,
-      //   filter: true,
-      //   width: 150,
-      //   cellRendererFramework: (params) => {
-      //     return params.value === 0 ? (
-      //       <div className=""> </div>
-      //     ) : (
-      //       <div className="">{params.value}</div>
-      //     );
-      //   },
-      // },
+     
       {
         headerName: "Edit/Block/Delete",
         field: "transactions",
@@ -285,6 +199,7 @@ class UsersList extends React.Component {
                   let editurl =
                     "/app/user/edit/UserEdit?email=" + params.data.email;
                   history.push(editurl);
+                  
                 }}
               />
               {params.data?.user_status == 2 ? (
@@ -321,8 +236,9 @@ class UsersList extends React.Component {
      let params1 = "?per_page=" + this.state.pageSize + "&page=1";
     getAPICall("getUser"+ params1).then((response) => {
       const rowData = response.data;
-      this.setState({ rowData });
-      // this.setState({totalCount:rowData.length})
+      this.setState({ rowData:rowData.user });
+     
+       this.setState({totalCount:rowData.totalCount})
     });
   }
 
@@ -354,7 +270,7 @@ class UsersList extends React.Component {
           console.log(params,"pauihfhed"); 
 
             console.log("Ressss:: ", res)
-            rowData.successCallback([...res.data.user], res.data.user.length);
+            rowData.successCallback([...res.data.user], res.data.totalCount);
           });
         },
       };
@@ -398,6 +314,7 @@ class UsersList extends React.Component {
       searchVal: val
     }) */
   };
+  
 
   refreshCard = () => {
     this.setState({ reload: true });
@@ -515,6 +432,7 @@ class UsersList extends React.Component {
     
   };
   
+  
     //   successCallback([...res.data.user], res.data.user.length);
     // }).catch((err)=>console.log(err,"err"))
   
@@ -522,6 +440,7 @@ class UsersList extends React.Component {
   render() {
     const { rowData, columnDefs, defaultColDef, pageSize, gridApi } =
       this.state;
+      // console.log(rowData,"rowData")
     return (
       <Row className="app-user-list">
         <Col sm="12"></Col>
@@ -621,10 +540,10 @@ class UsersList extends React.Component {
                   <div className="">
                     <div className="h2 float-left">
                       Total Users :{" "}
-                      {/* {this.state.rowData !== null
-                        ? this.state.rowData.length
-                        : 0} */}
-                        {this.setState.totalCount?this.state.totalCount:0}
+                      {this.state.rowData !== null
+                        ? this.state.totalCount
+                        : 0}
+                        {/* {this.setState.totalCount?this.state.totalCount:0} */}
                     </div>
                   </div>
                   <div className="filter-actions d-flex">
@@ -689,8 +608,6 @@ class UsersList extends React.Component {
                         onPageChage={this.handleChange}
                         rowHeight={60}
                         resizable={true}
-                        //gridAutoHeight={true}
-                        //enableRtl={context.state.direction === "rtl"}
                       />
                     )}
                   </ContextLayout.Consumer>

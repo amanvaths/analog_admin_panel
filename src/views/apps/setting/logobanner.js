@@ -46,6 +46,9 @@ class LogoBanner extends React.Component {
     sort_logo: null, 
     favicon: null,
     banner_img: null,
+    bannerDesc:"",
+    newsHead:"",
+    newsContent:"",
     pageSize: 20,
     isVisible: true,
     reload: true,
@@ -194,18 +197,18 @@ class LogoBanner extends React.Component {
   removeCard = () => {
     this.setState({ isVisible: false })
   }
-  async componentDidMount() {
-    getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
-    .then(response => {
-      if(response.status === 200){
-        let rowData = response.data?.params?.website;
-        console.log("rowData1 : ",rowData)
-        if(rowData){
-          this.setState({ rowData });
-        }
-      }
-    })
-  }
+  // async componentDidMount() {
+  //   getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
+  //   .then(response => {
+  //     if(response.status === 200){
+  //       let rowData = response.data?.params?.website;
+  //       console.log("rowData1 : ",rowData)
+  //       if(rowData){
+  //         this.setState({ rowData });
+  //       }
+  //     }
+  //   })
+  // }
 
   updateQUERY = () => {
     const serialize = require('form-serialize');
@@ -284,13 +287,14 @@ class LogoBanner extends React.Component {
   updateBannerimg = (banner_url) => {
     const formData = new FormData();
     if(this.state.banner_logo){
-      formData.append("banner_logo", this.state.banner_logo, this.state.banner_logo.name);
+      formData.append("banner", this.state.banner_logo, this.state.banner_logo.name);
+      formData.append("description", this.state.bannerDesc);
     }
-    formData.append("action", "set_banner_url");
-    formData.append("user_id", this.state.currentUserId);
-      postAPICall('update-website',formData)
+    // formData.append("action", "set_banner_url");
+    // formData.append("user_id", this.state.currentUserId);
+      postAPICall('addNotification',formData)
       .then(response => {
-          if(response.data.query_status){
+          if(response.status==200){
             NotificationManager.success(response.data.message)             
           }else{
             NotificationManager.error(response.data.message)             
@@ -313,6 +317,27 @@ class LogoBanner extends React.Component {
           }
         }
     }
+
+    submitHandler(e){
+      e.preventDefault();
+      let{newsContent,newsHead} =this.state;
+      
+      if(newsContent==="" || newsHead===""){
+         NotificationManager.warning("Please fill the field Properly.")
+      }
+      else{
+        postAPICall("addNews",{title:newsHead,description:newsContent}).then((res)=>{
+             console.log(res.data,"response.....");
+             NotificationManager.success(res.data.message)
+             // setTimeout(()=>{ window.location.reload();},1000)
+         }).catch((err)=>{
+           NotificationManager.error("Something went wrong.")
+         })
+      }
+      
+ 
+ 
+  }
   render() {
   
     const { rowData,columnDefs, defaultColDef, pageSize, logo, sort_logo, favicon , editorState} = this.state;
@@ -430,7 +455,7 @@ class LogoBanner extends React.Component {
                             </Col>
                         </Form>
                         <Form className="row" id="bannerndata">
-                            <Col md="2" sm="12">
+                            <Col md="4" sm="12">
                                 <FormGroup>
                                     <Label for="logo_img" className="label-text h6">Banner</Label>
                                     <CustomInput type="file" accept="image/*" name="banner_logo" id="banner_logo" onChange={(e) => {this.uploadIMG(e, 'banner_logo')}}/>
@@ -438,34 +463,12 @@ class LogoBanner extends React.Component {
                             </Col>
                             <Col md="4" sm="12">
                                 <FormGroup>
-                                <Media className="mr-2 my-25" left target="_blank" href={rowData && rowData.banner_url ? url+rowData.banner_url : ''}>
-                                  <Media
-                                    className="users-avatar-shadow rounded"
-                                    object
-                                    src={rowData && rowData.banner_url ? url+rowData.banner_url : ''}
-                                    alt="user profile image"
-                                    width="350"
-                                    />
-                                </Media>
+                                    <Label for="banner_logo" className="label-text h6">Description</Label>
+                                    <Input  name="banner_desc" id="banner_logo" onChange={(e) => {this.setState({bannerDesc:e.target.value})}}/>
                                 </FormGroup>
                             </Col>
-                            <Col md="2" sm="12">
-                                <FormGroup>
-                                  {rowData ? (
-                                    <>
-                                      <Toggle
-                                        defaultChecked={rowData.banner_status ? rowData.banner_status : false}
-                                        className="switch-danger mt-2"
-                                        onClick={() => {
-                                            this.updateBannerStatus(rowData ? rowData.banner_status : false)
-                                        }}
-                                      />
-                                    
-                                    </>
-                                  ) : ''}
-                                </FormGroup>
-                            </Col>
-                            <Col md="2" sm="12">
+                          
+                            <Col md="4" sm="12">
                                 <FormGroup>
                                     <Button.Ripple
                                         color="primary"
@@ -480,11 +483,44 @@ class LogoBanner extends React.Component {
                                 </FormGroup>
                             </Col>
                         </Form>
+
+                        <Form className="row" id="bannerndata">
+                      
+                            <Col md="4" sm="12">
+                                <FormGroup>
+                                    <Label for="newsHead" className="label-text h6">News Heading</Label>
+                                    <Input type="text" name="newsHead" id="newsHead" onChange={(e) => {this.setState({newsHead:e.target.value})}}/>
+                                </FormGroup>
+                            </Col>
+                            <Col md="4" sm="12">
+                             
+                                <FormGroup>
+                                    <Label for="newscontent" className="label-text h6"> News Description</Label>
+                                    <Input  name="newsContent" id="newscontent" onChange={(e) => {this.setState({newsContent:e.target.value})}}/>
+                                </FormGroup>
+                                
+                            </Col>
+                          
+                            <Col md="4" sm="12">
+                                <FormGroup>
+                                    <Button.Ripple
+                                        color="primary"
+                                        type="button"
+                                        className="mt-2"
+                                        onClick={(e) => {
+                                          this.submitHandler(e)
+                                        }}
+                                    >
+                                        Add News
+                                    </Button.Ripple>
+                                </FormGroup>
+                            </Col>
+                        </Form>
                     </CardBody>
                 </Card>
             </Col>
         </Row>
-        <Row className="app-user-list">
+        {/* <Row className="app-user-list">
             <Col sm="12">
             <Card>
                 <CardBody>
@@ -530,7 +566,7 @@ class LogoBanner extends React.Component {
                 </CardBody>
             </Card>
             </Col>
-        </Row>
+        </Row> */}
       </React.Fragment>
     )
   }

@@ -253,7 +253,7 @@ setlevel = async (value)=>{
                     </UncontrolledDropdown>
                   </div>
                   <div className="">
-                    <div className="h2 float-left">User-Level:{this.state.level==0?"All level":this.state.level}</div>
+                    <div className="h2 float-left">Level Income:{this.state.level==0?"All level":this.state.level}</div>
                   </div>
                   <div className="dropdown actions-dropdown">
                       <UncontrolledButtonDropdown>

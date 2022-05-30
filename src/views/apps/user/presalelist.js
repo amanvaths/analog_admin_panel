@@ -107,9 +107,9 @@ class UsersList extends React.Component {
       width: 150,
       cellRendererFramework: params => {
         return params.value == true ? ( // for active
-          <div className="badge badge-pill badge-light-success">Success</div>
+          <div className="badge badge-pill badge-light-success">Active</div>
         ) : params.value == false ? ( // Not submitted
-          <div className="badge badge-pill badge-light-danger">Failed</div>
+          <div className="badge badge-pill badge-light-danger">In-active</div>
         ) : null
       }
     },

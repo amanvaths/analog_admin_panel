@@ -114,15 +114,15 @@ class RefferelTab extends React.Component {
      
       },
       {
-      headerName: "Wallet Balance",
-      field: "wallet_balance",
+      headerName: "Affiliates Wallet Balance",
+      field: "affilites_wallet",
       filter : true,
-      width: 200,
+      width: 250,
      
       },
       {
         headerName: "Date",
-        field: "time",
+        field: "createdAt",
         filter: true,
         width: 250,
         cellRendererFramework: params => {

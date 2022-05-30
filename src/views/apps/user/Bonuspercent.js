@@ -34,6 +34,10 @@ function Bonuspercent(){
  const[level1,setLevel1] = useState("");
  const[level2,setLevel2] = useState("");
  const[level3,setLevel3] = useState("");
+ const[hoLevel1,setHoLevel1] = useState("");
+ const[hoLevel2,setHoLevel2] = useState("");
+ const[hoLevel3,setHoLevel3] = useState("");
+ 
  const[submitResp,setSubmitResp] = useState({});
  console.log(level1,"hello")
 
@@ -46,13 +50,16 @@ useEffect(()=>{
                setLevel1(response.level1);
                setLevel2(response.level2);
                setLevel3(response.level3);
+               setHoLevel1(response.ho_level1);
+               setHoLevel2(response.ho_level2);
+               setHoLevel3(response.ho_level3);
             })
 
 },[submitResp])
 
 function submitHandler(e){
      e.preventDefault();
-     axios.post(BaseURLAPI + "/updatePrecent",{bonus:buyingbonus,level1:level1,level2:level2,level3:level3}).then((resp)=>{
+     axios.post(BaseURLAPI + "/updatePrecent",{bonus:buyingbonus,level1:level1,level2:level2,level3:level3,ho_level1:hoLevel1,ho_level2:hoLevel2,ho_level3:hoLevel3}).then((resp)=>{
        console.log(resp.data,"pesppp");
        NotificationManager.success("Update Successfully.");
        setSubmitResp(resp.data);
@@ -73,18 +80,19 @@ function submitHandler(e){
 
  
     return (
-      <Row className="app-user-list">
+      <Row className="app-user-list justify-content-center">
         <Col sm="12"></Col>
-        <Col sm="12">
+        <Col sm="12" md="6">
           <Card>
-            <CardBody style={{ height: "70vh" }}>
+            <CardBody className="h-100" style={{ height: "90vh" }}>
               <h1 className="text-center">Bonus Percent</h1>
-              <form className="py-4" onSubmit={submitHandler}>
+              <form className="py-3 py-sm-1" onSubmit={submitHandler}>
+              <h3 className="text-center  pb-md-2" style={{textDecoration:"underline"}}>Bounty Bonus Percent</h3>
                 <div className="form-group row d-flex justify-content-center">
-                  <label for="levelname" className="col-sm-2 col-form-label">
+                  <label htmlFor="levelname" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
                     Buying Bonus Percent
                   </label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control px-1"
@@ -96,11 +104,12 @@ function submitHandler(e){
                     />
                   </div>
                 </div>
+                <h3 className="text-center py-md-1 pb-md-2" style={{textDecoration:"underline"}}>Affiliate Bonus percent</h3>
                 <div className="form-group row d-flex justify-content-center">
-                  <label for="coinQty" className="col-sm-2 col-form-label">
+                  <label htmlFor="coinQty" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
                    Level-1 Percent
                   </label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control  px-1"
@@ -113,10 +122,10 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <label for="coinPrice" className="col-sm-2 col-form-label">
+                  <label htmlFor="coinPrice" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
                   Level-2 Percent
                   </label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control  px-1"
@@ -129,10 +138,10 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="duration" className="col-sm-2 col-form-label">
+                  <Label htmlFor="duration" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
                   Level-3 Percent
                   </Label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control  px-1"
@@ -143,9 +152,57 @@ function submitHandler(e){
                       name="level3"
                     />
                   </div>
-
                 </div>
-               
+                <h3 className="text-center py-md-1 pb-md-2" style={{textDecoration:"underline"}}>HandOut Level Percent</h3>
+                <div className="form-group row d-flex justify-content-center">
+                  <Label htmlFor="duration" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
+                  Level-1 Percent
+                  </Label>
+                  <div className="col-sm-12 col-md-6">
+                    <Input
+                      type="number"
+                      className="form-control  px-1"
+                      id="duration"
+                      placeholder="Level-3 Percent"
+                      onChange={(e)=>{setHoLevel1(e.target.value)}}
+                      value={hoLevel1}
+                      name="level3"
+                    />
+                  </div>
+                </div>
+                <div className="form-group row d-flex justify-content-center">
+                  <Label htmlFor="duration" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
+                  Level-2 Percent
+                  </Label>
+                  <div className="col-sm-12 col-md-6">
+                    <Input
+                      type="number"
+                      className="form-control  px-1"
+                      id="duration"
+                      placeholder="Level-3 Percent"
+                      onChange={(e)=>{setHoLevel2(e.target.value)}}
+                      value={hoLevel2}
+                      name="level3"
+                    />
+                  </div>
+                </div>
+                <div className="form-group row d-flex justify-content-center">
+                  <Label htmlFor="duration" className="col-sm-12 col-md-5 col-lg-3 col-form-label">
+                  Level-3 Percent
+                  </Label>
+                  <div className="col-sm-12 col-md-6">
+                    <Input  
+                      type="number"
+                      className="form-control  px-1"
+                      id="duration"
+                      placeholder="Level-3 Percent"
+                      onChange={(e)=>{setHoLevel3(e.target.value)}}
+                      value={hoLevel3}
+                      name="level3"
+                    />
+                  </div>
+                </div>
+
                 <div className="btnClass d-flex justify-content-center">
                 <Button.Ripple
                     color="primary"

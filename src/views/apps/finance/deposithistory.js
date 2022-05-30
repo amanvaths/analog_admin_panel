@@ -84,19 +84,19 @@ class UsersList extends React.Component {
         editable: true,
         filter: true,
         width: 300,
-        cellRendererFramework: params => {
-          return (
-            <>
-              {params.data.status  == true ? (
-                <div className="badge badge-pill badge-light-success">{params.value}</div>
-              ) : params.data.status  == false ? (
-                <div className="badge badge-pill badge-light-danger">{params.value}</div>
-              ) : (
-                <div>{params.value}</div>
-              )}
-            </>
-          )
-        }
+        // cellRendererFramework: params => {
+        //   return (
+        //     <>
+        //       {params.data.status  == true ? (
+        //         <div className="badge badge-pill badge-light-success">{params.value}</div>
+        //       ) : params.data.status  == false ? (
+        //         <div className="badge badge-pill badge-light-danger">{params.value}</div>
+        //       ) : (
+        //         <div>{params.value}</div>
+        //       )}
+        //     </>
+        //   )
+        // }
     },
     {
       headerName: "Coin ",

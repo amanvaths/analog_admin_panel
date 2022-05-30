@@ -86,10 +86,13 @@ class UsersList extends React.Component {
     is_coin:false,
     columnDefs: [
       {
+        headerName: "#",
+        field: "rowIndex",
+         filter : true,
         width: 50,
-        checkboxSelection: true,
-        headerCheckboxSelectionFilteredOnly: true,
-        headerCheckboxSelection: true
+        cellRendererFramework: (params) => {
+          return <>{1 + params?.rowIndex}</>;
+        },
       },
       // {
       //   headerName: "Order Type",
@@ -329,10 +332,11 @@ class UsersList extends React.Component {
   DeleteOrder = (_id) => {
     
     if(_id){
-      getAPICall('deleteOrders?_id='+_id)
+      getAPICall('deleteOrders?id='+_id)
       .then(response => {
-        const rowData = response.data;
-        if(rowData.status == 200){
+        // const rowData = response.data;
+        if(response.status == 200){
+          this.gridApi.updateRowData({ remove: _id });
           NotificationManager.success(response.data.message)             
         }else{
           NotificationManager.error(response.data.message)             

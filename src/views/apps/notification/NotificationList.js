@@ -23,6 +23,8 @@ import { AgGridReact } from "ag-grid-react"
 import {
   Edit,
   Trash2,
+  UserCheck,
+  UserX,
   ChevronDown,
   Clipboard,
   Printer,
@@ -86,11 +88,15 @@ class NotificationList extends React.Component {
     is_coin:false,
     columnDefs: [
       {
+        headerName: "#",
+        field: "rowIndex",
+        // filter : true,
         width: 50,
-        checkboxSelection: true,
-        headerCheckboxSelectionFilteredOnly: true,
-        headerCheckboxSelection: true
+        cellRendererFramework: (params) => {
+          return <>{1 + params?.rowIndex}</>;
+        },
       },
+      
       // {
       //   headerName: "Order Type",
       //   field: "order_type",
@@ -112,54 +118,21 @@ class NotificationList extends React.Component {
       //     )
       //   }
       // },
+  
       {
-        headerName: "Email",
-        field: "email",
+        headerName: "Banner",
+        field: "banner",
         filter: true,
         width: 250,
       },
       {
-        headerName: "Coin (Currency) ",
-        field: "currency_type",
+        headerName: "Description",
+        field: "description",
         filter: true,
-        width: 200,
-        // cellRendererFramework: params => {
-        //   return (
-        //     <div className=""> {params.value.toUpperCase()} ({params.data.compare_currency.toUpperCase()})</div>
-        //   )
-        // }
+        width: 250,
+    
       },
-      {
-        headerName: "Amount",
-        field: "amount",
-        filter: true,
-        width: 150,
-      },
-      {
-        headerName: "Price",
-        field: "raw_price",
-        filter: true,
-        width: 150,
-        cellRendererFramework: params => {
-          return (
-            <div className="badge badge-pill badge-light-success">
-              {params.value ? params.value : ''}
-            </div>
-          )
-        }
-      },
-      {
-        headerName: "Compare Currency",
-        field: "compair_currency",
-        filter: true,
-        width: 200,
-      },
-      {
-        headerName: "Coin Volume",
-        field: "cVolume",
-        filter: true,
-        width: 200,
-      },
+    
       {
         headerName: "Date",
         field: "createdAt",
@@ -168,25 +141,32 @@ class NotificationList extends React.Component {
       
       },
       {
-        headerName: "Actions",
-        field: "order_id",
-        width: 130,
-        cellRendererFramework: params => {
+        headerName: "Delete",
+        field: "transactions",
+        width: 200,
+        cellRendererFramework: (params) => {
           return (
             <div className="actions cursor-pointer">
-              <Trash2
-                size={15}
+              {/* <Edit
+                className="mr-2"
+                size={28}
                 onClick={() => {
-                  let selectedData = this.gridApi.getSelectedRows()
-                  this.gridApi.updateRowData({ remove: selectedData })
-                  console.log(params,"paraa")
-                  this.DeleteOrder(params.data._id)
+                  let editurl =
+                    "/app/editnotification?id=" + params.data._id;
+                  history.push(editurl);
+                }}
+              /> */}
+              <Trash2
+                size={28}
+                onClick={() => {
+                  this.deleteNotification(params.data._id);
                 }}
               />
             </div>
-          )
-        }
-      }
+          );
+        },
+      },
+    
     ]
   }
   onGridReady = params => {
@@ -257,9 +237,9 @@ class NotificationList extends React.Component {
     this.setState({ isVisible: false })
   }
   async componentDidMount() {
-    getAPICall('getAllOrder')
+    getAPICall('getNotification')
     .then(response => {
-      const rowData = response.data.order;
+      const rowData = response.data;
       if(rowData){
         this.setState({ rowData });
       }
@@ -326,16 +306,17 @@ class NotificationList extends React.Component {
   //       console.log(response)
   //   })
   // }
-  DeleteOrder = (_id) => {
+  deleteNotification = (_id) => {
     
     if(_id){
-      getAPICall('deleteOrders?_id='+_id)
+      postAPICall("deleteNotification",{id:_id})
       .then(response => {
-        const rowData = response.data;
-        if(rowData.status == 200){
-          NotificationManager.success(response.data.message)             
+        
+        if(response.status == 200){
+          NotificationManager.success("deleted successfully")  ;
+          window.location.reload();           
         }else{
-          NotificationManager.error(response.data.message)             
+          NotificationManager.error("something went wrong")             
         }
       })
     }else{
@@ -375,46 +356,17 @@ class NotificationList extends React.Component {
   //   }
   // }
   
-  clear(){
-    // let self = this;
-    let dataSource = {
-        getRows(rowData) {
-            rowData.successCallback([],0);
-        }
-    };
-    this.state.gridApi.setDatasource(dataSource);
-}
+//   clear(){
+//     // let self = this;
+//     let dataSource = {
+//         getRows(rowData) {
+//             rowData.successCallback([],0);
+//         }
+//     };
+//     this.state.gridApi.setDatasource(dataSource);
+// }
 
-  updateQUERY(start,end){
-    const sDate =new Date(start).toISOString().substring(0,10)
-    const eDate = new Date(end).toISOString().substring(0,10)
-   
-    // this.clear();
- 
-    if(start==null || end ==null){
-      NotificationManager.error("Missing credentials.")
-    }else{
-      getAPICall("getAllOrder?start="+sDate +"&endDate="+eDate).then((res)=>{
-    
-        // if(res.data.status == 200) {
-        //   let dataSource = {
-        //     getRows(rowData) {
-        //         rowData.successCallback(res.data.order,res.data.order.length);
-        //     }
-        // };
-    
-        //   this.state.gridApi.setDatasource(dataSource);
-        //   //  this.setState({ rowData:res.data.order });
-        // }
-        this.setState({rowData:res.data.order})
-      }
-      ).catch((err)=> console.log(err,"err"))
-    }
-   
-  
-  
-    
-  };
+
   
 
   render() {
@@ -434,166 +386,9 @@ class NotificationList extends React.Component {
   
     return (
     <React.Fragment>
-       {/*  <Row className="app-user-list">
-            <Col sm="12">
-                <Card>
-                    <CardBody>
-                        <Form className="row" id="orderdata">
-                            <input type='hidden' name="token_type" value='self'/>
-                            <Col md="2" sm="12">
-                              <FormGroup>
-                                {token_list != null ? (
-                                    <>
-                                    <Label for="basicInput" className="h5">Select Coin</Label>
-                                    <Select
-                                        className="React"
-                                        id="currency_type"
-                                        classNamePrefix="select"
-                                        defaultValue={token_list[0]}
-                                        name="currency_type"
-                                        options={token_list}
-                                    />
-                                    </>
-                                ) : null}
-                                </FormGroup>
-                            </Col>
-                            <Col md="2" sm="12">
-                              <FormGroup>
-                                {paired_list != null ? (
-                                    <>
-                                    <Label for="basicInput" className="h5">Select Paired Currency</Label>
-                                    <Select
-                                        className="React"
-                                        id="compare_currency"
-                                        classNamePrefix="select"
-                                        defaultValue={paired_list[0]}
-                                        name="compare_currency"
-                                        options={paired_list}
-                                    />
-                                    </>
-                                ) : null}
-                                </FormGroup>
-                            </Col>
-                            <Col md="1" sm="12">
-                                <FormGroup>
-                                    {CoinSetting != null ? (
-                                        <>
-                                        <Label for="basicInput" className="label-text h5">Order Type</Label>
-                                        <Select
-                                            className="React"
-                                            id="action"
-                                            classNamePrefix="select"
-                                            defaultValue={CoinSetting[0]}
-                                            name="action"
-                                            options={CoinSetting}
-                                            onChange={(e) => {
-                                              this.setState({ is_coin: e.value })
-                                          }}
-                                        />
-                                        </>
-                                    ) : null}
-                                </FormGroup>
-                            </Col>
-                            <Col md="2" sm="12">
-                                <FormGroup>
-                                    <Label for="inc_order" className="label-text h6">Increasing Or Decreasing Price</Label>
-                                    <NumericInput id="inc_order" value={0} step={0.01} precision={2} name="inc_order" mobile style={mobileStyle} />
-                                </FormGroup>
-                            </Col>
-                            <Col md="2" sm="12">
-                                <FormGroup>
-                                    <Label for="total_order" className="label-text h6">Total Order</Label>
-                                    <NumericInput id="total_order" min={0} max={100} value={0} name="total_order" step={1} precision={2} mobile style={mobileStyle} />
-                                </FormGroup>
-                            </Col>
-                            <Col md="1" sm="12">
-                                <FormGroup>
-                                    <Label for="volume" className="label-text h6">Volume</Label>
-                                    <Input type="number" min='0' id="volume" name="volume" placeholder="Enter Volume" />
-                                </FormGroup>
-                            </Col>
-                            <Col md="1" sm="12">
-                                <FormGroup>
-                                    <Label for="raw_price" className="label-text h6"> Price</Label>
-                                    <Input type="number" min='0' id="raw_price" name="raw_price" placeholder="Enter Price" />
-                                </FormGroup>
-                            </Col>
-                            <Col md="1" sm="12">
-                                <FormGroup>
-                                    <Button.Ripple
-                                        color="primary"
-                                        type="button"
-                                        className="mt-2"
-                                        onClick={() => {
-                                            this.updateQUERY( )
-                                        }}
-                                    >
-                                        Create
-                                    </Button.Ripple>
-                                </FormGroup>
-                            </Col>
-                        </Form>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row> */}
+    
         <Row className="app-user-list">
 
-        <Col sm="12">
-        <Card>
-              <CardBody>
-                <Form className="row">
-        
-                  <Col md="3" sm="12">
-                    <FormGroup>
-                      <Label for="from" className="h5">
-                       FROM
-                      </Label>
-                      <Input
-                        type="date"
-                        id="from"
-                        placeholder="From Date"
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col md="3" sm="12">
-                    <FormGroup>
-                      <Label for="to" className="h5">
-                        To
-                      </Label>
-                      <Input
-                        type="date"
-                        id="to"
-                        placeholder="To Date"
-                        // invalid={this.state.validPassword === false}
-                      />
-                      
-                    </FormGroup>
-                  </Col>
-                  <Col md="3" sm="12">
-                    <FormGroup>
-                      <Button.Ripple
-                        color="primary"
-                        type="button"
-                        className="mt-2"
-                        onClick={() => {
-                          this.updateQUERY(
-                            document.querySelector("#from").value? document.querySelector("#from").value:null,
-                            document.querySelector("#to").value? document.querySelector("#to").value:null
-                          );
-                        }}
-                      >
-                        Find Order
-                      </Button.Ripple>
-                    </FormGroup>
-                  </Col>
-                </Form>
-              </CardBody>
-            </Card>
-        </Col>
-       
-          
-          {/* hellooooooooooo */}
             <Col sm="12">
             <Card>
                 <CardBody>
@@ -636,9 +431,9 @@ class NotificationList extends React.Component {
                     {/* <div className="">
                       <div className="h2 float-left">Total Buy Order : {this.state.total_buy_order}</div>
                     </div> */}
-                    <div className="">
+                    {/* <div className="">
                       <div className="h2 float-left">Total Order : {this.state.total_order}</div>
-                    </div>
+                    </div> */}
                     <div className="filter-actions d-flex">
                         <Input
                         className="w-50 mr-1 mb-1 mb-sm-0"
@@ -693,6 +488,7 @@ class NotificationList extends React.Component {
                             paginationPageSize={pageSize}
                             resizable={true}
                             enableRtl={context.state.direction === "rtl"}
+                           
                         />
                         )}
                     </ContextLayout.Consumer>
@@ -701,7 +497,7 @@ class NotificationList extends React.Component {
                            <div className="float-left">
                           <Spinner color="primary" />
                         </div>
-                        <h2 className="float-left ml-1">System is Loading All Token settings.</h2>
+                        <h2 className="float-left ml-1">System is Loading All Notification.</h2>
                       </>
                     )}
                 </div>

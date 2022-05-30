@@ -107,9 +107,9 @@ class LevelReport extends React.Component {
       filter: true,
       width: 150,
       cellRendererFramework: params => {
-        return params.value == true ? ( // for active
+        return params.value === 1 ? ( // for active
           <div className="badge badge-pill badge-light-success">Success</div>
-        ) : params.value == false ? ( // Not submitted
+        ) : params.value === 0 ? ( // Not submitted
           <div className="badge badge-pill badge-light-danger">Failed</div>
         ) : null
       }
@@ -122,19 +122,20 @@ class LevelReport extends React.Component {
       width: 200,
     },
     {
+      headerName: "Token Quantity",
+      field: "token_quantity",
+      filter: true,
+      editable: true,
+      width: 250,
+    },
+    {
     headerName: "Token Price",
     field: "token_price",
     filter: true,
     editable: true,
     width: 200,
   },
-  {
-    headerName: "Token Quantity",
-    field: "token_quantity",
-    filter: true,
-    editable: true,
-    width: 250,
-  },
+  
     
     
     {
@@ -145,43 +146,17 @@ class LevelReport extends React.Component {
       width: 250,
     },
     
-      // {
-      //   headerName: "Edit/Delete",
-      //   field: "transactions",
-      //   width: 200,
-      //   cellRendererFramework: (params) => {
-      //     console.log(params,"paramsf")
-
-      //     return (
-      //       <div className="actions cursor-pointer">
-      //         <Edit
-      //           className="mr-2"
-      //           size={28}
-      //            onClick={() => {
-      //              let editurl =
-      //                "/app/user/editpresale:" + params.data._id;
-      //              history.push(editurl);
-      //            }}
-      //         />
-      //         <Trash2
-      //           size={28}
-      //           onClick={() => {
-      //             this.deleteUser("delete_user", params.data._id, -2);
-      //           }}
-      //         />
-      //       </div>
-      //     );
-      //   },
-      // },
+ 
     ],
   };
 
-  async componentDidMount() {
+  componentDidMount() {
      let params1 = "?per_page=" + this.state.pageSize + "&page=1";
     getAPICall("getIncome"+ params1).then((response) => {
-        console.log(response,"resp..")
+      
       const rowData = response.data.ref;
-      this.setState({ rowData });
+      console.log(rowData,"ref")
+      this.setState({rowData:rowData});
     });
   }
 
@@ -210,10 +185,12 @@ class LevelReport extends React.Component {
             params = `${params}&${f}=${fV}`;
           })
           //console.log(params);  + params
-          getAPICall("getIncome",params).then((res) => {
+          getAPICall("getIncome"+params).then((res) => {
             console.log("Ressss:: ", res)
-            rowData.successCallback([...res.data.ref], res.data.totalCount);
-          });
+            //this.setState({rowData:res.data.ref})
+           
+             rowData.successCallback([...res.data.ref], res.data.totalCount);
+          }).catch((err)=>NotificationManager("something went wrong."))
         },
       };
 
@@ -339,9 +316,10 @@ class LevelReport extends React.Component {
         }
       }).catch((e) => console.log(e));
   };
+
+
   render() {
-    const { rowData, columnDefs, defaultColDef, pageSize, gridApi } =
-      this.state;
+    const { rowData, columnDefs, defaultColDef, pageSize, gridApi } = this.state;
     return (
       <Row className="app-user-list">
         <Col sm="12"></Col>
@@ -410,7 +388,7 @@ class LevelReport extends React.Component {
                     </div>
                   <div className="">
                     <div className="h2 float-left">
-                     Level Report:{this.state.level==0?"All user":"Level-"+this.state.level}
+                     Level Report:{this.state.level==0?" All ": this.state.level}
                     </div>
                   </div>
                   <div className="filter-actions d-flex">
@@ -475,8 +453,7 @@ class LevelReport extends React.Component {
                         onPageChage={this.handleChange}
                         rowHeight={60}
                         resizable={true}
-                        //gridAutoHeight={true}
-                        //enableRtl={context.state.direction === "rtl"}
+
                       />
                     )}
                   </ContextLayout.Consumer>
@@ -490,6 +467,8 @@ class LevelReport extends React.Component {
                     </h2>
                   </>
                 )}
+
+               
               </div>
             </CardBody>
           </Card>

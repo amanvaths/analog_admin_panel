@@ -64,15 +64,15 @@ const navigationConfig = [
     groupTitle: "Notification & News",
     parentof: 'notification',
   },
-  {
-    id: "notificationandNews",
-    parentof: 'notification',
-    title: "Create News & Notification",
-    type: "item",
-    icon: <Icon.Circle size={12} />,
+  // {
+  //   id: "notificationandNews",
+  //   parentof: 'notification',
+  //   title: "Create News & Notification",
+  //   type: "item",
+  //   icon: <Icon.Circle size={12} />,
     
-    navLink: "/app/notificationform"
-  },
+  //   navLink: "/app/notificationform"
+  // },
   {
     id: "notification",
     parentof: 'notification',
@@ -423,22 +423,22 @@ const navigationConfig = [
     groupTitle: "Finance Report",
     parentof: 'finance',
   },
-  {
-    id: "usertradefund",
-    title: "User Trade Fund",
-    type: "item",
-    icon: <Icon.User size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/usertradefund",
-  },
-  {
-    id: "userwalletfund",
-    title: "User Wallet Fund",
-    type: "item",
-    icon: <Icon.User size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/userwalletfund",
-  },
+  // {
+  //   id: "usertradefund",
+  //   title: "User Trade Fund",
+  //   type: "item",
+  //   icon: <Icon.User size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/usertradefund",
+  // },
+  // {
+  //   id: "userwalletfund",
+  //   title: "User Wallet Fund",
+  //   type: "item",
+  //   icon: <Icon.User size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/userwalletfund",
+  // },
   {
     id: "deposithistory",
     title: "Deposite History",
@@ -447,14 +447,14 @@ const navigationConfig = [
     parentof: 'finance',
     navLink: "/app/finance/deposithistory",
   },
-  {
-    id: "withdrawistory",
-    title: "Withdraw History",
-    type: "item",
-    icon: <Icon.User size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/withdrawistory",
-  },
+  // {
+  //   id: "withdrawistory",
+  //   title: "Withdraw History",
+  //   type: "item",
+  //   icon: <Icon.User size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/withdrawistory",
+  // },
   // {
   //   id: "userdeposithistory",
   //   title: "User Deposite History",
@@ -471,14 +471,14 @@ const navigationConfig = [
   //   parentof: 'finance',
   //   navLink: "/app/finance/userwithdrawistory",
   // },
-  {
-    id: "adduserfund",
-    title: "Add Fund to User",
-    type: "item",
-    icon: <Icon.Settings size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/adduserfund"
-  },
+  // {
+  //   id: "adduserfund",
+  //   title: "Add Fund to User",
+  //   type: "item",
+  //   icon: <Icon.Settings size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/adduserfund"
+  // },
   // {
   //   id: "depositinrfromuser",
   //   title: "Deposit Inr From User",
@@ -487,54 +487,54 @@ const navigationConfig = [
   //   parentof: 'finance',
   //   navLink: "/app/finance/depositinrfromuser",
   // },
-  {
-    id: "withdrawinrfromuser",
-    title: "Withdraw Inr From User",
-    type: "item",
-    icon: <Icon.HelpCircle size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/withdrawinrfromuser"
-  },
-  {
-    id: "capturefundfromuser",
-    title: "INR History",
-    type: "item",
-    icon: <Icon.HelpCircle size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/capturefundfromuser"
-  },
-  {
-    id: "realfundtranfertouser",
-    title: "Real Fund User",
-    type: "item",
-    icon: <Icon.Info size={20} />,
-    parentof: 'finance',
-    navLink: "/app/finance/realfundtranfertouser",
-  },
-  {
-    id: "withdrawalfeesreport",
-    title: "Withdrawal Fees List",
-    type: "item",
-    icon: <Icon.Eye size={20} />,
-    navLink: "/app/finance/withdrawalfeesreport",
-    parentof: 'finance',
-  },
-  {
-    id: "stakehistory",
-    title: "Stake History",
-    icon: <Icon.Info size={20} />,
-    type: "item",
-    parentof: 'settings',
-    navLink: "/app/finance/stakehistory"
-  },
-  {
-    id: "stakehistorydaily",
-    title: "Daily Stake History",
-    icon: <Icon.Info size={20} />,
-    type: "item",
-    parentof: 'finance',
-    navLink: "/app/finance/stakehistorydaily"
-  },
+  // {
+  //   id: "withdrawinrfromuser",
+  //   title: "Withdraw Inr From User",
+  //   type: "item",
+  //   icon: <Icon.HelpCircle size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/withdrawinrfromuser"
+  // },
+  // {
+  //   id: "capturefundfromuser",
+  //   title: "INR History",
+  //   type: "item",
+  //   icon: <Icon.HelpCircle size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/capturefundfromuser"
+  // },
+  // {
+  //   id: "realfundtranfertouser",
+  //   title: "Real Fund User",
+  //   type: "item",
+  //   icon: <Icon.Info size={20} />,
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/realfundtranfertouser",
+  // },
+  // {
+  //   id: "withdrawalfeesreport",
+  //   title: "Withdrawal Fees List",
+  //   type: "item",
+  //   icon: <Icon.Eye size={20} />,
+  //   navLink: "/app/finance/withdrawalfeesreport",
+  //   parentof: 'finance',
+  // },
+  // {
+  //   id: "stakehistory",
+  //   title: "Stake History",
+  //   icon: <Icon.Info size={20} />,
+  //   type: "item",
+  //   parentof: 'settings',
+  //   navLink: "/app/finance/stakehistory"
+  // },
+  // {
+  //   id: "stakehistorydaily",
+  //   title: "Daily Stake History",
+  //   icon: <Icon.Info size={20} />,
+  //   type: "item",
+  //   parentof: 'finance',
+  //   navLink: "/app/finance/stakehistorydaily"
+  // },
   {
     type: "groupHeader",
     groupTitle: "Bonus (Report)",

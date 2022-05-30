@@ -177,7 +177,7 @@ class UsersList extends React.Component {
               <Eye
                 className="mr-2"
                 size={28}
-                onClick={() => history.push("/app/user/edit/UserEdit")}
+                onClick={() => history.push("/app/user/edit/UserEdit?email="+params.data.email)}
               />
               <UserCheck
                 className="mr-2"

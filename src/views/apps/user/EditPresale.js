@@ -6,6 +6,7 @@ import {
   FormGroup,
   Form,
   Input,
+ 
   Label,
   Button,
   Row,
@@ -29,7 +30,6 @@ function EditPresale(){
     const presaleid = useParams();
     const preid = presaleid.presale_id;
     const id =preid.substr(1)
-    console.log(id,"presaleid" );
  const[levelName,setLevelName] = useState("");
  const[coinQuantity,setCoinQuantity] = useState("");
  const[coinPrice,setCoinPrice] = useState("");
@@ -41,10 +41,9 @@ function EditPresale(){
 useEffect(()=>{
     axios.get(BaseURLAPI +"/getpresalebyid?_id="+id).then((res)=>{
         const response = res.data._data;
-        console.log(res.data._data,"res.data")
+       
               
-                // const response = res.data.Bonus_percent[0];
-                // console.log(response.buying_bonus,"helll");
+                
                 setLevelName(response.levelname);
                 setCoinQuantity(response.coinquantity);
                 setCoinPrice(response.price);
@@ -56,10 +55,11 @@ useEffect(()=>{
 
 function submitHandler(e){
      e.preventDefault();
-     if(levelName=="" ||coinQuantity=="" || coinPrice=="" || duration==""){
+    
+     if(levelName=="" ||coinQuantity=="" || coinPrice=="" || duration==""||status==""){
         NotificationManager.warning("Something missing in input field");
      }
-     axios.post(BaseURLAPI + "/updatepresale",{_id:id,levelname:levelName,coinquantity:coinQuantity,price:coinPrice,duration:duration}).then((resp)=>{
+     axios.post(BaseURLAPI + "/updatepresale",{_id:id,levelname:levelName,coinquantity:coinQuantity,price:coinPrice,duration:duration,status:status}).then((resp)=>{
        console.log(resp.data,"pesppp");
        NotificationManager.success(resp.data.message);
        setTimeout(()=>{history.push("/app/user/presalelist")},1500)
@@ -78,18 +78,18 @@ function submitHandler(e){
      
  
     return (
-      <Row className="app-user-list">
+      <Row className="app-user-list justify-content-center">
         <Col sm="12"></Col>
-        <Col sm="12">
+        <Col sm="12" md="6">
           <Card>
             <CardBody style={{ height: "70vh" }}>
               <h1 className="text-center">Edit Presale</h1>
               <Form className="py-4" onSubmit={submitHandler}>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="levelname" className="col-sm-2 col-md-3 col-lg-1 col-form-label">
+                  <Label for="levelname" className="col-sm-12 col-md-5 col-lg-2 col-form-label">
                     Level Name
                   </Label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="text"
                       className="form-control px-1"
@@ -101,7 +101,7 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="coinQty" className="col-sm-2 col-md-3 col-lg-1 col-form-label">
+                  <Label for="coinQty" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Coin Quantity
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -116,7 +116,7 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="coinPrice" className="col-sm-2 col-md-3 col-lg-1 col-form-label">
+                  <Label for="coinPrice" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Coin Price
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -131,7 +131,7 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="duration" className="col-sm-2 col-md-3 col-lg-1 col-form-label">
+                  <Label for="duration" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Duration
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -146,14 +146,14 @@ function submitHandler(e){
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="status" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label for="status" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Status
                   </Label>
                   <div className="col-sm-10 col-md-6">
-                    <select selected={status} onChange={(e)=>{editStatus(e.target.value)}} id="status" className="form-control" >
-                      <option value="0">In-active</option>
-                      <option value="1">Active</option>
-                    </select>
+                    < Input type="select" onChange={(e)=>{editStatus(e.target.value)}} id="status" className="form-control"  >
+                      <option value="0" selected={status?1:0}>In-active</option>
+                      <option value="1" selected={status?1:0}>Active</option>
+                    </Input>
                   </div>
                 </div>
                 <div className="btnClass d-flex justify-content-center">
@@ -174,4 +174,4 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps)(EditPresale);
-//export default Bonuspercent;
+

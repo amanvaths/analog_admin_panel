@@ -58,15 +58,15 @@ class addpresale extends React.Component {
 
   render() {
     return (
-      <Row className="app-user-list">
+      <Row className="app-user-list justify-content-center">
         <Col sm="12"></Col>
-        <Col sm="12">
+        <Col sm="12" md="6">
           <Card>
             <CardBody style={{ height: "70vh" }}>
               <h1 className="text-center">Add Pre-sale</h1>
               <Form className="py-4" onSubmit={this.submitHandler.bind(this)}>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="levelname" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label for="levelname" className="col-sm-3 col-md-5 col-lg-2  col-form-label">
                     Level Name
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -81,7 +81,7 @@ class addpresale extends React.Component {
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="coinQty" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label htmlFor="coinQty" className="col-sm-3 col-md-5 col-lg-2 col-form-label">
                     Coin Quantity
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -96,7 +96,7 @@ class addpresale extends React.Component {
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="coinPrice" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label htmlFor="coinPrice" className="col-sm-3 col-md-5 col-lg-2 col-form-label">
                     Coin Price
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -113,7 +113,7 @@ class addpresale extends React.Component {
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="duration" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label htmlFor="duration" className="col-sm-3 col-md-5 col-lg-2 col-form-label">
                     Duration
                   </Label>
                   <div className="col-sm-10 col-md-6">
@@ -128,15 +128,14 @@ class addpresale extends React.Component {
                   </div>
                 </div>
                 <div className="form-group row d-flex justify-content-center">
-                  <Label for="status" className="col-sm-2 col-md-2 col-lg-1 col-form-label">
+                  <Label htmlFor="status" className="col-sm-3 col-md-5 col-lg-2 col-form-label">
                     Status
                   </Label>
                   <div className="col-sm-10 col-md-6">
-                    <select onChange={(e)=>{this.state.status=e.target.value;}} id="status" className="form-control" >
-                      <option value="" disabled selected>Select</option>
+                    <Input type="select" onChange={(e)=>{this.state.status=e.target.value;}} id="status" className="form-control" >
                       <option value="0">In-active</option>
                       <option value="1">Active</option>
-                    </select>
+                    </Input>
                   </div>
                 </div>
                 <div className="btnClass d-flex justify-content-center">
