@@ -49,7 +49,7 @@ class UsersList extends React.Component {
   state = {
     rowData: null,
     allToken: null,
-    pageSize: 20,
+    pageSize: 50,
     isVisible: true,
     reload: true,
     collapse: true,

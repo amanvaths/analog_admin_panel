@@ -210,80 +210,80 @@ class LogoBanner extends React.Component {
   //   })
   // }
 
-  updateQUERY = () => {
-    const serialize = require('form-serialize');
-    const form = document.querySelector('#tokendata');
-    let alltxtData = serialize(form, { hash: true });
-    const formData = new FormData();
-    if(this.state.logo)
-      formData.append("logo", this.state.logo, this.state.logo.name);
-    if(this.state.sort_logo)
-      formData.append("sort_logo", this.state.sort_logo, this.state.sort_logo.name);
-    if(this.state.favicon)
-      formData.append("favicon", this.state.favicon, this.state.favicon.name);
-      formData.append("user_id", this.state.currentUserId)
-      formData.append("data", JSON.stringify(alltxtData));
-      console.log("formData: ", formData)
-      postAPICall("update-website", formData).then((d)=>{
-        if(d.status === 200) {
-          if(d.data.status === 200) {
-            NotificationManager.success(d.data.message);
-            getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
-              .then(response => {
-                if(response.status === 200){
-                  let rowData = response.data?.params?.website;
-                  if(rowData){
-                    this.setState({ rowData });
-                  }
-                }
-              })
-          } else {
-            NotificationManager.error(d.data.message);
-          }
-        } else {
-          NotificationManager.error("Something Went Wrong!!");
-        }
-      }).catch(e=>console.log(e))
-  }
-  updateNewsLater = () => {
-    const serialize = require('form-serialize');
-    const form = document.querySelector('#newslaterdata');
-    let alltxtData = serialize(form, { hash: true });
-      alltxtData.action = 'set_news_later';   
-      alltxtData.user_id = this.state.currentUserId;   
+  // updateQUERY = () => {
+  //   const serialize = require('form-serialize');
+  //   const form = document.querySelector('#tokendata');
+  //   let alltxtData = serialize(form, { hash: true });
+  //   const formData = new FormData();
+  //   if(this.state.logo)
+  //     formData.append("logo", this.state.logo, this.state.logo.name);
+  //   if(this.state.sort_logo)
+  //     formData.append("sort_logo", this.state.sort_logo, this.state.sort_logo.name);
+  //   if(this.state.favicon)
+  //     formData.append("favicon", this.state.favicon, this.state.favicon.name);
+  //     formData.append("user_id", this.state.currentUserId)
+  //     formData.append("data", JSON.stringify(alltxtData));
+  //     console.log("formData: ", formData)
+  //     postAPICall("update-website", formData).then((d)=>{
+  //       if(d.status === 200) {
+  //         if(d.data.status === 200) {
+  //           NotificationManager.success(d.data.message);
+  //           getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
+  //             .then(response => {
+  //               if(response.status === 200){
+  //                 let rowData = response.data?.params?.website;
+  //                 if(rowData){
+  //                   this.setState({ rowData });
+  //                 }
+  //               }
+  //             })
+  //         } else {
+  //           NotificationManager.error(d.data.message);
+  //         }
+  //       } else {
+  //         NotificationManager.error("Something Went Wrong!!");
+  //       }
+  //     }).catch(e=>console.log(e))
+  // }
+  // updateNewsLater = () => {
+  //   const serialize = require('form-serialize');
+  //   const form = document.querySelector('#newslaterdata');
+  //   let alltxtData = serialize(form, { hash: true });
+  //     alltxtData.action = 'set_news_later';   
+  //     alltxtData.user_id = this.state.currentUserId;   
       
-      postAPICall('update-website',alltxtData)
-      .then(response => {
-          if(response.data.query_status){
-            NotificationManager.success(response.data.message)             
-          }else{
-            NotificationManager.error(response.data.message)             
-          }
-      })
-  }
-  updateBannerStatus = (status) => {
-    let alltxtData = {}
-      alltxtData.action = 'set_banner_status';   
-      alltxtData.banner_status = status ? false : true;   
-      alltxtData.user_id = this.state.currentUserId;   
-      postAPICall('update-website',alltxtData)
-      .then(response => {
-          if(response.data.query_status){
-            getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
-              .then(response => {
-                if(response.status === 200){
-                  let rowData = response.data?.params?.website;
-                  if(rowData){
-                    this.setState({ rowData });
-                  }
-                }
-              })
-            NotificationManager.success(response.data.message)             
-          }else{
-            NotificationManager.error(response.data.message)             
-          }
-      })
-  }
+  //     postAPICall('update-website',alltxtData)
+  //     .then(response => {
+  //         if(response.data.query_status){
+  //           NotificationManager.success(response.data.message)             
+  //         }else{
+  //           NotificationManager.error(response.data.message)             
+  //         }
+  //     })
+  // }
+  // updateBannerStatus = (status) => {
+  //   let alltxtData = {}
+  //     alltxtData.action = 'set_banner_status';   
+  //     alltxtData.banner_status = status ? false : true;   
+  //     alltxtData.user_id = this.state.currentUserId;   
+  //     postAPICall('update-website',alltxtData)
+  //     .then(response => {
+  //         if(response.data.query_status){
+  //           getAPICall('get-website-data?admin_user_id='+this.state.currentUserId)
+  //             .then(response => {
+  //               if(response.status === 200){
+  //                 let rowData = response.data?.params?.website;
+  //                 if(rowData){
+  //                   this.setState({ rowData });
+  //                 }
+  //               }
+  //             })
+  //           NotificationManager.success(response.data.message)             
+  //         }else{
+  //           NotificationManager.error(response.data.message)             
+  //         }
+  //     })
+  // }
   updateBannerimg = (banner_url) => {
     const formData = new FormData();
     if(this.state.banner_logo){
@@ -348,11 +348,11 @@ class LogoBanner extends React.Component {
             <Col sm="12">
                 <Card>
                     <CardBody>
-                          <div className="row col-md-12">
+                          {/* <div className="row col-md-12">
                             <span className=" float-left h3 text-success mr-1">Website url: </span> <span className="h3 text-success"> {rowData && rowData.website_name ? rowData.website_name : ''} </span> 
 
-                          </div>
-                        <Form className="row" id="tokendata">
+                          </div> */}
+                        {/* <Form className="row" id="tokendata">
                             <Col md="2" sm="12">
                                 <FormGroup>
                                     <Label for="logo_img" className="label-text h6">Logo</Label>
@@ -425,18 +425,13 @@ class LogoBanner extends React.Component {
                                     </Button.Ripple>
                                 </FormGroup>
                             </Col>
-                        </Form>
-                        <Form className="row" id="newslaterdata">
+                        </Form> */}
+                        {/* <Form className="row" id="newslaterdata">
                             <Col md="8" sm="12">
                                 <FormGroup>
                                     <Label for="news_later" className="label-text h6">News Later Message</Label>
                                     <Input type="text" defaultValue={rowData && rowData.news_later ? rowData.news_later : ''} name="news_later" id="news_later" placeholder="Enter message" />
-                                    {/* <Textrea
-                                      // editorState={editorState}
-                                      wrapperClassName="demo-wrapper"
-                                      editorClassName="demo-editor"
-                                      onEditorStateChange={this.onEditorStateChange}
-                                    /> */}
+                                  
                                 </FormGroup>
                             </Col>
                             <Col md="2" sm="12">
@@ -453,7 +448,7 @@ class LogoBanner extends React.Component {
                                     </Button.Ripple>
                                 </FormGroup>
                             </Col>
-                        </Form>
+                        </Form> */}
                         <Form className="row" id="bannerndata">
                             <Col md="4" sm="12">
                                 <FormGroup>

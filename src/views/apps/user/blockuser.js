@@ -424,11 +424,12 @@ class UsersList extends React.Component {
                         pivotPanelShow="always"
                         paginationPageSize={pageSize}
                         resizable={true}
+                        overlayNoRowsTemplate="No User Blocked."
                         enableRtl={context.state.direction === "rtl"}
                       />
                     )}
                   </ContextLayout.Consumer>
-                ) : null}
+                ) : <div><h3>No blocked user Found.</h3></div>}
               </div>
             </CardBody>
           </Card>

@@ -104,7 +104,7 @@ function submitHandler(e){
                   <Label for="coinQty" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Coin Quantity
                   </Label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control px-1"
@@ -119,7 +119,7 @@ function submitHandler(e){
                   <Label for="coinPrice" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Coin Price
                   </Label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="text"
                       className="form-control px-1"
@@ -134,7 +134,7 @@ function submitHandler(e){
                   <Label for="duration" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Duration
                   </Label>
-                  <div className="col-sm-10 col-md-6">
+                  <div className="col-sm-12 col-md-6">
                     <Input
                       type="number"
                       className="form-control px-1"
@@ -149,10 +149,10 @@ function submitHandler(e){
                   <Label for="status" className="col-sm-12 col-md-5 col-lg-2  col-form-label">
                     Status
                   </Label>
-                  <div className="col-sm-10 col-md-6">
-                    < Input type="select" onChange={(e)=>{editStatus(e.target.value)}} id="status" className="form-control"  >
-                      <option value="0" selected={status?1:0}>In-active</option>
-                      <option value="1" selected={status?1:0}>Active</option>
+                  <div className="col-sm-12 col-md-6">
+                    < Input type="select" onChange={(e)=>{editStatus(e.target.value)}} id="status" className="form-control" value={status?1:0} >
+                      <option value="0" >In-active</option>
+                      <option value="1">Active</option>
                     </Input>
                   </div>
                 </div>

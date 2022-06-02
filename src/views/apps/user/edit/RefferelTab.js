@@ -222,7 +222,7 @@ class RefferelTab extends React.Component {
       
     }).catch(()=>{
       this.setState({ rowData:[] });
-      NotificationManager.error("No Network!")
+      NotificationManager.error("No Referral found!")
     })
    
   }

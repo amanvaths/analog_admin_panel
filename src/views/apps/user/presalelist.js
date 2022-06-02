@@ -434,6 +434,7 @@ class UsersList extends React.Component {
                         cacheBlockSize={pageSize}
                         rowModelType={"infinite"}
                         onPageChage={this.handleChange}
+                        overlayNoRowsTemplate="No Pre-sale Details found. "
                         rowHeight={60}
                         resizable={true}
                         //gridAutoHeight={true}

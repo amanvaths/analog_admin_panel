@@ -133,6 +133,7 @@ class addpresale extends React.Component {
                   </Label>
                   <div className="col-sm-10 col-md-6">
                     <Input type="select" onChange={(e)=>{this.state.status=e.target.value;}} id="status" className="form-control" >
+                      <option selected disabled>Select Status</option>
                       <option value="0">In-active</option>
                       <option value="1">Active</option>
                     </Input>

@@ -37,23 +37,15 @@ import "../../../assets/scss/pages/users.scss";
 import * as Icon from "react-feather";
 import { history } from "../../../history";
 import { getAPICall, postAPICall } from "../../../redux/helpers/api_functions";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 class LevelReport extends React.Component {
-  static getDerivedStateFromProps(props, state) {
-    if (props.currentUserId !== state.currentUserId) {
-      return {
-        currentUserId: props.currentUserId,
-      };
-    }
-    // Return null if the state hasn't changed
-    return null;
-  }
+ 
   state = {
     rowData: null,
     gridApi: null,
     level:0,
-    pageSize: 50,
+    pageSize: 400,
     isVisible: true,
     reload: true,
     collapse: true,
@@ -161,11 +153,11 @@ class LevelReport extends React.Component {
   };
 
   componentDidMount() {
-     let params1 = "?per_page=" + this.state.pageSize + "&page=1";
+  let params1 = "?per_page=" + this.state.pageSize + "&page=1";
     getAPICall("getIncome"+ params1).then((response) => {
       
       const rowData = response.data.ref;
-      console.log(rowData,"ref")
+      // console.log(rowData,"ref")
       this.setState({rowData:rowData});
     });
   }
@@ -177,6 +169,7 @@ class LevelReport extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    
     if (this.state.gridApi !== prevState.gridApi) {
       const dataSource = {
         getRows: (rowData) => {
@@ -195,11 +188,14 @@ class LevelReport extends React.Component {
             params = `${params}&${f}=${fV}`;
           })
           //console.log(params);  + params
-          getAPICall("getIncome"+params +"&from_level=1&from_level=2&from_level=3").then((res) => {
-            console.log("Ressss:: ", res)
-            this.setState({rowData:res.data.ref})
+          getAPICall("getIncome" ).then((res) => {
+            // console.log("Ressss:: ", res)
+            const allIncome = res.data.ref.filter((data)=>data.from_level != 0);
+            // console.log(allIncome,"allIncome")
+            //  this.setState({rowData:[...allIncome]})
+            console.log(allIncome,"ref")
            
-              rowData.successCallback([...res.data.ref], res.data.ref.length);
+               rowData.successCallback([...allIncome], allIncome.length);
           }).catch((err)=>NotificationManager("something went wrong."))
         },
       };
@@ -308,6 +304,7 @@ class LevelReport extends React.Component {
       });
       console.log(value,"value")
        getAPICall("getIncome?bonus_type=Level&from_level="+ value).then((d)=>{
+         console.log(d,"dataaa")
         if(d.status === 200){
          
           const income = d.data.ref;
@@ -484,7 +481,7 @@ class LevelReport extends React.Component {
                 
                   <div className="">
                     <div className="h2 float-left">
-                     Level Report:{this.state.level==0?" All ": this.state.level}
+                     Level Report:{this.state.level==0?" All ": `${this.state.level}` }
                     </div>
                   </div>
                   <div className="filter-actions d-flex">
@@ -550,6 +547,7 @@ class LevelReport extends React.Component {
                         onPageChage={this.handleChange}
                         rowHeight={60}
                         resizable={true}
+                     
 
                       />
                     )}
@@ -575,10 +573,11 @@ class LevelReport extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    currentUserId: state.auth.login.user.user_id,
-  };
-};
-export default connect(mapStateToProps)(LevelReport);
+// const mapStateToProps = (state) => {
+//   return {
+//     currentUserId: state.auth.login.user.user_id,
+//   };
+// };
+// export default connect(mapStateToProps)(LevelReport);
+export default LevelReport;
 
