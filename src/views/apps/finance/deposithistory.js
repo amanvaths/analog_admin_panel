@@ -103,6 +103,7 @@ class UsersList extends React.Component {
       field: "symbol",
       filter: true,
       width: 150,
+      editable: true,
     },
     {
       headerName: "Amount ",
@@ -154,7 +155,6 @@ class UsersList extends React.Component {
           <>
             <div className=""> {params.data.createdAt ? new Date(params.data.createdAt).toLocaleString() : '' }</div>
           </>
-          
         )
       }
     },
@@ -165,7 +165,9 @@ class UsersList extends React.Component {
     this.gridColumnApi = params.columnApi
   }
   filterData = (column, val) => {
-    var filter = this.gridApi.getFilterInstance(column)
+    console.log(column,val,"value")
+    var filter = this.gridApi.getFilterInstance(column);
+    console.log(filter,"filter")
     var modelObj = null
     if (val !== "all") {
       modelObj = {
@@ -228,10 +230,10 @@ class UsersList extends React.Component {
     this.setState({ isVisible: false })
   }
   async componentDidMount() {
-    let formData = {
-      user_id: this.state.currentUserId,
-      token: this.state.token,
-    }
+    // let formData = {
+    //   user_id: this.state.currentUserId,
+    //   token: this.state.token,
+    // }
     getAPICall('depositHestory')
     .then(response => {
       const rowData = response.data.transaction;
@@ -439,6 +441,7 @@ class UsersList extends React.Component {
                             floatingFilter={true}
                             pagination={true}
                             pivotPanelShow="always"
+                            cacheBlockSize={rowData}
                             paginationPageSize={pageSize}
                             resizable={true}
                             enableRtl={context.state.direction === "rtl"}

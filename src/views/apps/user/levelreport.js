@@ -88,6 +88,7 @@ class LevelReport extends React.Component {
       //     );
       //   },
       // },
+      
       {
         headerName: "Email",
         field: "email",
@@ -95,6 +96,14 @@ class LevelReport extends React.Component {
         editable: true,
         width: 250,
       },
+      {
+        headerName: "Bonus",
+        field: "bonus",
+        filter: true,
+        editable: true,
+        width: 250,
+      },
+
     //   {
     //   headerName: "Status",
     //   field: "status",
@@ -140,13 +149,7 @@ class LevelReport extends React.Component {
   
     
     
-    {
-      headerName: "Bonus",
-      field: "bonus",
-      filter: true,
-      editable: true,
-      width: 250,
-    },
+   
     
  
     ],
@@ -436,12 +439,12 @@ class LevelReport extends React.Component {
               </CardBody>
             </Card>
         </Col>
-        <Col sm="12">
+        <Col sm="12" >
           <Card>
-            <CardBody>
+            <CardBody style={{height:"80vh"}} >
               <div
                 className="ag-theme-material ag-grid-table"
-               
+               style= {{height:"70vh"}}
               >
                 <div className="ag-grid-actions d-flex justify-content-between flex-wrap mb-1">
                   <div className="sort-dropdown">

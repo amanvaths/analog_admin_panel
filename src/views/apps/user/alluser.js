@@ -279,9 +279,9 @@ class UsersList extends React.Component {
     }
   }
   filterData = (column, val) => {
-    console.log("Column :: "+column, val)
+    console.log("Column :: ",column, val)
     var filter = this.gridApi.getFilterInstance(column);
-    console.log("filter");
+    
     var modelObj = null;
     if (val !== "all") {
       modelObj = {

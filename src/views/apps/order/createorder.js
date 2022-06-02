@@ -411,6 +411,7 @@ class UsersList extends React.Component {
         //   //  this.setState({ rowData:res.data.order });
         // }
         this.setState({rowData:res.data.order})
+        this.setState({total_order:res.data.order.length})
       }
       ).catch((err)=> console.log(err,"err"))
     }
